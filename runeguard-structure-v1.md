@@ -21,7 +21,7 @@ Commercial cleaning companies clean facilities they don't own, for clients who w
 > Craddock's crew arrives at Hospital Dallas. Each cleaner opens the Telegram bot, selects the job, and photographs the areas before they start. They clean. They photograph each area again. The bot submits everything to RuneGuard. The AI analyses the before/after pairs and drafts a report. Craddock's supervisor reviews it on the dashboard, approves it, and it lands in the facility manager's inbox — clean, professional, and timestamped.
 
 **Prime and Sub-Contractors:**
-A Client can operate in both roles depending on the job. When Craddock's cleans one of their own customers (Hospital Dallas, DOME in Dallas), Craddock's is the Prime — they own the customer relationship, approve the report, and deliver it. But Craddock's can also work as a Sub-Contractor for another Prime — for example, if Dallas Cleaning Inc. holds the contract with a facility and hires Craddock's to do the work, then Dallas Cleaning Inc. is the Prime. Craddock's crew submits the photos, but Dallas Cleaning Inc. reviews and delivers the report to the end customer. The facility only ever hears from the Prime.
+A Client can operate in both roles depending on the job. When Craddock's cleans one of their own customers (Hospital Dallas, DOME in Dallas), Craddock's is the Prime — they own the customer relationship, approve the report, and deliver it. But Craddock's can also work as a Sub-Contractor for another company — for example, if Dallas Cleaning Inc. holds the contract with a facility and hires Craddock's to do the work, Dallas Cleaning Inc. is the Prime. In this case, Dallas Cleaning Inc. does not need their own RuneGuard account. They are stored as a lightweight reference on the job (name + email). Craddock's crew submits the photos, Craddock's supervisor reviews, and the report is delivered to Dallas Cleaning Inc.'s contact. The end facility only ever hears from the Prime.
 
 ---
 
@@ -44,9 +44,12 @@ Platform
     │       ├── AIAnalysis
     │       └── Report                   always delivered from Prime — Sub is never visible
     │
-    └── [as Sub-Contractor]              another Client working under a Prime
+    └── [as Sub-Contractor]              working under an external Prime (e.g. Dallas Cleaning Inc.)
         ├── CrewMember(s)                their crew, linked via Telegram
-        └── Jobs (executing_client)      submit photos only — Prime reviews + delivers
+        └── Job
+            ├── prime_contractor_name    "Dallas Cleaning Inc." (plain text — no account needed)
+            ├── prime_contractor_email   report delivered here
+            └── [no Customer needed]     the Prime owns the facility relationship
 ```
 
 **Craddock's in practice:**
@@ -94,15 +97,18 @@ created_at
 ### Job
 ```
 id
-client_id               → Client
-customer_id             → Customer
+client_id               → Client (always the executing company, e.g. Craddock's)
+customer_id             → Customer (the facility being cleaned) — nullable when working as Sub
 name                    auto-generated: "{Customer} — {Date}" or crew-provided
 status                  submitted | in_review | accepted | delivered | failed
 failure_reason          text (populated when status = failed)
+prime_contractor_name   text — only set when client is acting as Sub (e.g. "Dallas Cleaning Inc.")
+prime_contractor_email  email — report delivered here instead of Customer.contact_email
 created_at
 submitted_at
 delivered_at
 ```
+*When `prime_contractor_name` is set: the job is a sub-contract. Report goes to `prime_contractor_email`. When null: normal job, report goes to `Customer.contact_email`.*
 
 ### JobCrewAssignment
 ```
