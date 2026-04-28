@@ -21,7 +21,7 @@ Commercial cleaning companies clean facilities they don't own, for clients who w
 > Craddock's crew arrives at Hospital Dallas. Each cleaner opens the Telegram bot, selects the job, and photographs the areas before they start. They clean. They photograph each area again. The bot submits everything to RuneGuard. The AI analyses the before/after pairs and drafts a report. Craddock's supervisor reviews it on the dashboard, approves it, and it lands in the facility manager's inbox — clean, professional, and timestamped.
 
 **Prime and Sub-Contractors:**
-Craddock's always owns the customer relationship — they are the Prime. When they use a sub-contractor crew on a job, the sub submits photos, but Craddock's supervisor still reviews and delivers the report. The customer only ever hears from Craddock's.
+A Client can operate in both roles depending on the job. When Craddock's cleans one of their own customers (Hospital Dallas, DOME in Dallas), Craddock's is the Prime — they own the customer relationship, approve the report, and deliver it. But Craddock's can also work as a Sub-Contractor for another Prime — for example, if Dallas Cleaning Inc. holds the contract with a facility and hires Craddock's to do the work, then Dallas Cleaning Inc. is the Prime. Craddock's crew submits the photos, but Dallas Cleaning Inc. reviews and delivers the report to the end customer. The facility only ever hears from the Prime.
 
 ---
 
