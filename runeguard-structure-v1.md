@@ -12,16 +12,22 @@ Commercial cleaning companies clean facilities they don't own, for clients who w
 **The key entities and how they relate:**
 
 - **Client** — a cleaning company using RuneGuard (e.g. Craddock's Cleaning Services). Each client gets their own isolated workspace on the platform.
-- **Customer** — the facility the client cleans (e.g. Hospital Dallas, ACME Offices). The customer receives the finished report by email after every job.
-- **Crew Member** — an individual cleaner. They authenticate via Telegram — no separate login needed. They submit before/after photos through the bot directly from the job site.
-- **Job** — one cleaning visit. A job belongs to a customer, is executed by one or more crew members, covers one or more areas, and produces one report.
-- **Report** — the AI-compiled output of a job. Reviewed and approved by a supervisor before it's emailed to the customer.
+- **Customer** — the facility the client cleans directly (e.g. Hospital Dallas, ACME Offices). Receives the finished report by email after every job.
+- **Crew Member** — an individual cleaner. Authenticates via Telegram — no separate login. Submits before/after photos through the bot from the job site.
+- **SubContractor** — an external cleaning company hired by the Client to execute a job. Their crew submits photos; the Client reviews and delivers the report.
+- **PrimeContractor** — an external company that holds the facility contract and hires the Client to do the cleaning. The Client executes and reviews, but the report is delivered to the PrimeContractor, not the end facility.
+- **Job** — one cleaning visit. Belongs to a Customer or a PrimeContractor, executed by own crew or a SubContractor, covers one or more areas, produces one report.
+- **Report** — the AI-compiled output of a job. Reviewed and approved by a supervisor before delivery.
 
 **A typical job, start to finish:**
 > Craddock's crew arrives at Hospital Dallas. Each cleaner opens the Telegram bot, selects the job, and photographs the areas before they start. They clean. They photograph each area again. The bot submits everything to RuneGuard. The AI analyses the before/after pairs and drafts a report. Craddock's supervisor reviews it on the dashboard, approves it, and it lands in the facility manager's inbox — clean, professional, and timestamped.
 
 **Prime and Sub-Contractors:**
-A Client can operate in both roles depending on the job. When Craddock's cleans one of their own customers (Hospital Dallas, DOME in Dallas), Craddock's is the Prime — they own the customer relationship, approve the report, and deliver it. But Craddock's can also work as a Sub-Contractor for another company — for example, if Dallas Cleaning Inc. holds the contract with a facility and hires Craddock's to do the work, Dallas Cleaning Inc. is the Prime. In this case, Dallas Cleaning Inc. does not need their own RuneGuard account. They are stored as a lightweight reference on the job (name + email). Craddock's crew submits the photos, Craddock's supervisor reviews, and the report is delivered to Dallas Cleaning Inc.'s contact. The end facility only ever hears from the Prime.
+A Client operates in different roles depending on the job:
+
+1. **Client as Prime, own crew** — Craddock's cleans Hospital Dallas with their own crew. Craddock's owns the customer relationship, reviews the report, delivers it to the facility.
+2. **Client as Prime, Sub executes** — Craddock's holds the contract with Hospital Dallas but uses a SubContractor crew to do the work. The Sub's crew submits photos. Craddock's reviews and delivers. The customer never knows a sub was used.
+3. **Client as Sub** — Dallas Cleaning Inc. holds the contract with a facility and hires Craddock's to do the cleaning. Craddock's crew submits photos and reviews the report, but it is delivered to Dallas Cleaning Inc. (the PrimeContractor). The end facility only hears from Dallas Cleaning Inc.
 
 ---
 
@@ -29,33 +35,25 @@ A Client can operate in both roles depending on the job. When Craddock's cleans 
 
 ```
 Platform
-└── Client (Tenant)                      any cleaning company on the platform
+└── Client (Tenant)                       e.g. Craddock's Cleaning Services
     │
-    ├── [as Prime Contractor]             e.g. Craddock's — owns the customer relationship
-    │   ├── Customer                      e.g. Hospital Dallas, ACME Offices
-    │   │   └── Location / Facility       e.g. Building A, Floor 3 (optional sub-level)
-    │   └── Job
-    │       ├── accountable_client        → Prime (approves report + delivers to customer)
-    │       ├── executing_client          → Prime's own crew OR a Sub-Contractor Client
-    │       ├── CrewMember(s)             linked via Telegram user ID
-    │       ├── Area(s)                   e.g. Kitchen, Reception, Server Room
-    │       │   └── Media                 before + after photos per area
-    │       ├── CrewNotes
-    │       ├── AIAnalysis
-    │       └── Report                   always delivered from Prime — Sub is never visible
+    ├── Customer                           e.g. Hospital Dallas — facility they clean directly
+    ├── SubContractor                      e.g. Acme Crew Co. — hired to execute jobs for Client
+    │   └── CrewMember(s)                  sub's crew, linked via Telegram
+    ├── PrimeContractor                    e.g. Dallas Cleaning Inc. — Client works under them
+    ├── CrewMember(s)                      Client's own crew, linked via Telegram
     │
-    └── [as Sub-Contractor]              working under an external Prime (e.g. Dallas Cleaning Inc.)
-        ├── CrewMember(s)                their crew, linked via Telegram
-        └── Job
-            ├── prime_contractor_name    "Dallas Cleaning Inc." (plain text — no account needed)
-            ├── prime_contractor_email   report delivered here
-            └── [no Customer needed]     the Prime owns the facility relationship
+    └── Job
+        ├── customer_id                    → Customer     (set when Client is Prime)
+        ├── sub_contractor_id              → SubContractor (set when Sub executes the job)
+        ├── prime_contractor_id            → PrimeContractor (set when Client is Sub)
+        ├── CrewMember(s)                  own crew or Sub's crew
+        ├── Area(s)                        e.g. Kitchen, Reception, Server Room
+        │   └── Media                      before + after photos per area
+        ├── CrewNotes
+        ├── AIAnalysis
+        └── Report                         delivered to Customer OR PrimeContractor
 ```
-
-**Craddock's in practice:**
-- **Prime** to their own customers (Hospital Dallas, DOME in Dallas, etc.) — always
-- May use **Sub crews** on jobs — Sub submits photos, Craddock's supervisor approves, Craddock's delivers the report
-- May act as **Sub** for a larger prime — in that case the prime is accountable_client and delivers to the end customer
 
 ---
 
@@ -83,10 +81,33 @@ telegram_chat_id        optional
 created_at
 ```
 
+### SubContractor
+```
+id
+client_id               → Client (the prime who hired them)
+name                    e.g. "Acme Crew Co."
+contact_name
+contact_email
+phone                   optional
+created_at
+```
+
+### PrimeContractor
+```
+id
+client_id               → Client (the sub who works for them)
+name                    e.g. "Dallas Cleaning Inc."
+contact_name
+contact_email           ← report delivered here
+phone                   optional
+created_at
+```
+
 ### CrewMember
 ```
 id
 client_id               → Client
+sub_contractor_id       → SubContractor (nullable — set if crew belongs to a sub)
 name
 telegram_user_id        ← identity (no separate login)
 telegram_handle         e.g. "@bullet62"
@@ -97,18 +118,17 @@ created_at
 ### Job
 ```
 id
-client_id               → Client (always the executing company, e.g. Craddock's)
-customer_id             → Customer (the facility being cleaned) — nullable when working as Sub
+client_id               → Client
+customer_id             → Customer        (nullable — null when Client is acting as Sub)
+sub_contractor_id       → SubContractor   (nullable — set when a Sub executes the job)
+prime_contractor_id     → PrimeContractor (nullable — set when Client is acting as Sub)
 name                    auto-generated: "{Customer} — {Date}" or crew-provided
 status                  submitted | in_review | accepted | delivered | failed
 failure_reason          text (populated when status = failed)
-prime_contractor_name   text — only set when client is acting as Sub (e.g. "Dallas Cleaning Inc.")
-prime_contractor_email  email — report delivered here instead of Customer.contact_email
 created_at
 submitted_at
 delivered_at
 ```
-*When `prime_contractor_name` is set: the job is a sub-contract. Report goes to `prime_contractor_email`. When null: normal job, report goes to `Customer.contact_email`.*
 
 ### JobCrewAssignment
 ```
@@ -165,7 +185,8 @@ approved_at
 id
 client_id               → Client
 customer_id             → Customer
-crew_member_id          → CrewMember (default assignee)
+sub_contractor_id       → SubContractor   (optional default sub for this schedule)
+crew_member_id          → CrewMember      (default assignee)
 frequency               daily | weekly | custom
 cron_expression         e.g. "0 8 * * 2" (every Tuesday 8am)
 areas                   JSON list of area labels
@@ -181,9 +202,14 @@ next_run_at
 | From | To | Cardinality |
 |---|---|---|
 | Client | Customer | 1 : many |
+| Client | SubContractor | 1 : many |
+| Client | PrimeContractor | 1 : many |
 | Client | CrewMember | 1 : many |
 | Client | Job | 1 : many |
+| SubContractor | CrewMember | 1 : many |
 | Customer | Job | 1 : many |
+| SubContractor | Job | 1 : many |
+| PrimeContractor | Job | 1 : many |
 | Job | CrewMember | many : many (via JobCrewAssignment) |
 | Job | Area | 1 : many |
 | Area | Media | 1 : many |
@@ -198,24 +224,27 @@ next_run_at
 ```
 [submitted]
     ↓
-[in_review]   ← supervisor sees it on dashboard
+[in_review]   ← Client supervisor reviews on dashboard
     ↓              ↓
 [accepted]     [failed]   (with failure_reason)
     ↓
-[delivered]   ← PDF generated + sent to customer.contact_email
+[delivered]   ← PDF generated + emailed
 ```
 
 ---
 
 ## Delivery Flow
 
-1. Job reaches `accepted` status
-2. System generates PDF from Report.html_content
-3. Email sent to `Customer.contact_email` with PDF attached
-4. Report.status → `sent`, Report.sent_at = now
-5. Job.status → `delivered`, Job.delivered_at = now
+**When Client is Prime (customer_id is set):**
+1. Job accepted → PDF generated
+2. Report emailed to `Customer.contact_email`
+3. Job status → delivered
 
----
+**When Client is Sub (prime_contractor_id is set):**
+1. Job accepted → PDF generated
+2. Report emailed to `PrimeContractor.contact_email`
+3. Job status → delivered
+4. End facility is not contacted — Prime handles that relationship
 
 ---
 
