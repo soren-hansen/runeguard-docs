@@ -3,6 +3,28 @@
 
 ---
 
+## Background
+
+Commercial cleaning companies clean facilities they don't own, for clients who weren't there to watch. The job is done, but proving it — consistently, professionally, and at scale — is hard.
+
+**RuneGuard solves this.** Crew members photograph each area before and after cleaning via a Telegram bot. The platform analyses the photos with AI, compiles a structured cleaning report, and delivers it to the facility manager by email. The cleaning company's supervisor reviews every report before it goes out — nothing reaches the customer without approval.
+
+**The key entities and how they relate:**
+
+- **Client** — a cleaning company using RuneGuard (e.g. Craddock's Cleaning Services). Each client gets their own isolated workspace on the platform.
+- **Customer** — the facility the client cleans (e.g. Hospital Dallas, ACME Offices). The customer receives the finished report by email after every job.
+- **Crew Member** — an individual cleaner. They authenticate via Telegram — no separate login needed. They submit before/after photos through the bot directly from the job site.
+- **Job** — one cleaning visit. A job belongs to a customer, is executed by one or more crew members, covers one or more areas, and produces one report.
+- **Report** — the AI-compiled output of a job. Reviewed and approved by a supervisor before it's emailed to the customer.
+
+**A typical job, start to finish:**
+> Craddock's crew arrives at Hospital Dallas. Each cleaner opens the Telegram bot, selects the job, and photographs the areas before they start. They clean. They photograph each area again. The bot submits everything to RuneGuard. The AI analyses the before/after pairs and drafts a report. Craddock's supervisor reviews it on the dashboard, approves it, and it lands in the facility manager's inbox — clean, professional, and timestamped.
+
+**Prime and Sub-Contractors:**
+Craddock's always owns the customer relationship — they are the Prime. When they use a sub-contractor crew on a job, the sub submits photos, but Craddock's supervisor still reviews and delivers the report. The customer only ever hears from Craddock's.
+
+---
+
 ## Entity Map
 
 ```
