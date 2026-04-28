@@ -7,19 +7,30 @@
 
 ```
 Platform
-└── Client (Tenant)                      e.g. Craddock's Cleaning Services
-    ├── Customer                          e.g. Hospital Dallas, ACME Offices
-    │   └── Location / Facility           e.g. Building A, Floor 3 (optional sub-level)
-    ├── CrewMember                        linked via Telegram user ID
-    └── Job
-        ├── → Customer (1 job : 1 customer)
-        ├── → CrewMember(s) (1 job : many crew)
-        ├── Area(s)                       e.g. Kitchen, Reception, Server Room
-        │   └── Media                     before + after photos per area
-        ├── CrewNotes                     free text submitted with photos
-        ├── AIAnalysis                    generated from media
-        └── Report                       compiled output, state machine controlled
+└── Client (Tenant)                      any cleaning company on the platform
+    │
+    ├── [as Prime Contractor]             e.g. Craddock's — owns the customer relationship
+    │   ├── Customer                      e.g. Hospital Dallas, ACME Offices
+    │   │   └── Location / Facility       e.g. Building A, Floor 3 (optional sub-level)
+    │   └── Job
+    │       ├── accountable_client        → Prime (approves report + delivers to customer)
+    │       ├── executing_client          → Prime's own crew OR a Sub-Contractor Client
+    │       ├── CrewMember(s)             linked via Telegram user ID
+    │       ├── Area(s)                   e.g. Kitchen, Reception, Server Room
+    │       │   └── Media                 before + after photos per area
+    │       ├── CrewNotes
+    │       ├── AIAnalysis
+    │       └── Report                   always delivered from Prime — Sub is never visible
+    │
+    └── [as Sub-Contractor]              another Client working under a Prime
+        ├── CrewMember(s)                their crew, linked via Telegram
+        └── Jobs (executing_client)      submit photos only — Prime reviews + delivers
 ```
+
+**Craddock's in practice:**
+- **Prime** to their own customers (Hospital Dallas, DOME in Dallas, etc.) — always
+- May use **Sub crews** on jobs — Sub submits photos, Craddock's supervisor approves, Craddock's delivers the report
+- May act as **Sub** for a larger prime — in that case the prime is accountable_client and delivers to the end customer
 
 ---
 
@@ -177,23 +188,6 @@ next_run_at
 5. Job.status → `delivered`, Job.delivered_at = now
 
 ---
-
-## Contractor / Sub-Contractor (future layer)
-
-For when Craddock's uses a sub-contractor crew or works as a sub for a prime:
-
-```
-Job
-├── accountable_client_id    → Client  (owns customer relationship, approves report)
-├── executing_client_id      → Client  (provides the crew, may differ)
-```
-
-When `executing_client_id ≠ accountable_client_id`:
-- Sub's crew submits photos under the accountable client's job
-- Accountable client's supervisor reviews and approves
-- Report is always sent from the accountable client — customer never sees the sub
-
-*Not required for v1 — flag for roadmap.*
 
 ---
 
