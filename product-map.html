@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Map — Cleaning Documentation & Reporting SaaS</title>
+<style>
+  :root {
+    --navy: #0d1b2a;
+    --navy-mid: #1b2d42;
+    --navy-light: #243b55;
+    --gold: #c9a84c;
+    --gold-light: #e8c96e;
+    --gold-pale: #f5e6ba;
+    --white: #ffffff;
+    --off-white: #f8f6f0;
+    --gray-100: #f0eff0;
+    --gray-200: #e2e1e5;
+    --gray-400: #9a9aaa;
+    --gray-600: #5a5a6a;
+    --text: #1a1a2e;
+
+    /* Tier colors */
+    --tier0: #6b7280;
+    --tier0-bg: #f9fafb;
+    --tier1: #2563eb;
+    --tier1-bg: #eff6ff;
+    --tier2: #059669;
+    --tier2-bg: #ecfdf5;
+    --tier3: #9333ea;
+    --tier3-bg: #faf5ff;
+    --tier4: #c9a84c;
+    --tier4-bg: #fffbeb;
+
+    /* Block colors */
+    --block-core: #1e40af;
+    --block-report: #0891b2;
+    --block-task: #059669;
+    --block-compliance: #dc2626;
+    --block-crm: #9333ea;
+    --block-portal: #ea580c;
+    --block-dist: #c9a84c;
+    --block-notify: #16a34a;
+    --block-analytics: #db2777;
+    --block-enterprise: #0d1b2a;
+    --block-auth: #7c3aed;
+    --block-storage: #0369a1;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ── Navigation ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navy);
+    border-bottom: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 2rem;
+    overflow-x: auto;
+  }
+  nav .nav-brand {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    padding: 1rem 1.5rem 1rem 0;
+    border-right: 1px solid var(--navy-light);
+    white-space: nowrap;
+    margin-right: 1rem;
+  }
+  nav a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    padding: 1rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--gold-light); }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 50%, #1a2f48 100%);
+    color: white;
+    padding: 4rem 2rem 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 50%;
+    height: 180%;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    display: inline-block;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 span { color: var(--gold-light); }
+  .hero .tagline {
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 640px;
+    margin: 0 auto 2rem;
+    line-height: 1.5;
+  }
+  .hero .core-concept {
+    display: inline-block;
+    background: rgba(201,168,76,0.12);
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.9);
+    max-width: 580px;
+    text-align: left;
+  }
+
+  /* ── Page sections ── */
+  .page-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gold);
+  }
+  .section-number {
+    background: var(--navy);
+    color: var(--gold);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .section-header p {
+    color: var(--gray-600);
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+  }
+
+  /* ── Vision cards ── */
+  .vision-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .vision-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .vision-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gold);
+  }
+  .vision-card .vc-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .vision-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.8rem;
+  }
+  .vision-card p { color: var(--gray-600); font-size: 0.9rem; line-height: 1.6; }
+
+  .solution-banner {
+    background: var(--navy);
+    color: white;
+    border-radius: 12px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .solution-banner .sb-icon { font-size: 2.5rem; flex-shrink: 0; }
+  .solution-banner h3 { color: var(--gold-light); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4rem; }
+  .solution-banner p { font-size: 1.1rem; line-height: 1.5; color: rgba(255,255,255,0.9); }
+
+  .kfactor-box {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .kfactor-box .kf-icon { font-size: 2rem; flex-shrink: 0; }
+  .kfactor-box h3 { color: var(--navy); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; font-weight: 700; }
+  .kfactor-box p { color: #5a4a1a; font-size: 0.92rem; line-height: 1.6; }
+  .kfactor-flow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+  }
+  .kf-step {
+    background: var(--navy);
+    color: var(--gold-light);
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .kf-arrow { color: var(--gold); font-weight: 700; }
+
+  /* ── Tier cards ── */
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .tier-card {
+    border-radius: 14px;
+    border: 2px solid;
+    background: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .tier-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  }
+  .tier-card-header {
+    padding: 1.5rem;
+    color: white;
+    position: relative;
+  }
+  .tier-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.8;
+    margin-bottom: 0.25rem;
+  }
+  .tier-name { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.25rem; }
+  .tier-price { font-size: 1.1rem; font-weight: 600; opacity: 0.9; }
+  .tier-for { font-size: 0.82rem; opacity: 0.75; margin-top: 0.5rem; line-height: 1.4; }
+
+  .tier-card-body { padding: 1.5rem; flex: 1; }
+  .tier-features h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray-400);
+    margin-bottom: 0.6rem;
+    margin-top: 1rem;
+    font-weight: 700;
+  }
+  .tier-features h4:first-child { margin-top: 0; }
+  .tier-features ul { list-style: none; }
+  .tier-features li {
+    padding: 0.25rem 0;
+    font-size: 0.88rem;
+    color: var(--gray-600);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .tier-features li .check { color: #16a34a; flex-shrink: 0; }
+  .tier-features li .cross { color: #dc2626; flex-shrink: 0; }
+  .not-included { color: var(--gray-400) !important; }
+
+  /* Tier-specific colors */
+  .tier0 { border-color: var(--tier0); }
+  .tier0 .tier-card-header { background: linear-gradient(135deg, #374151, #6b7280); }
+  .tier1 { border-color: var(--tier1); }
+  .tier1 .tier-card-header { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
+  .tier2 { border-color: var(--tier2); }
+  .tier2 .tier-card-header { background: linear-gradient(135deg, #047857, #10b981); }
+  .tier3 { border-color: var(--tier3); }
+  .tier3 .tier-card-header { background: linear-gradient(135deg, #7e22ce, #a855f7); }
+  .tier4 { border-color: var(--tier4); }
+  .tier4 .tier-card-header { background: linear-gradient(135deg, var(--navy), #1e3a5f); }
+  .tier4 .tier-name { color: var(--gold-light); }
+  .tier4 .tier-price { color: var(--gold-pale); }
+
+  /* ── Feature block table ── */
+  .block-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .block-btn {
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid;
+    background: white;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+  }
+  .block-btn:hover, .block-btn.active { color: white !important; }
+  .block-btn[data-block="ALL"] { border-color: var(--navy); color: var(--navy); }
+  .block-btn[data-block="ALL"].active, .block-btn[data-block="ALL"]:hover { background: var(--navy); }
+  .block-btn[data-block="CORE"] { border-color: var(--block-core); color: var(--block-core); }
+  .block-btn[data-block="CORE"].active, .block-btn[data-block="CORE"]:hover { background: var(--block-core); }
+  .block-btn[data-block="REPORT"] { border-color: var(--block-report); color: var(--block-report); }
+  .block-btn[data-block="REPORT"].active, .block-btn[data-block="REPORT"]:hover { background: var(--block-report); }
+  .block-btn[data-block="TASK"] { border-color: var(--block-task); color: var(--block-task); }
+  .block-btn[data-block="TASK"].active, .block-btn[data-block="TASK"]:hover { background: var(--block-task); }
+  .block-btn[data-block="COMPLIANCE"] { border-color: var(--block-compliance); color: var(--block-compliance); }
+  .block-btn[data-block="COMPLIANCE"].active, .block-btn[data-block="COMPLIANCE"]:hover { background: var(--block-compliance); }
+  .block-btn[data-block="CRM"] { border-color: var(--block-crm); color: var(--block-crm); }
+  .block-btn[data-block="CRM"].active, .block-btn[data-block="CRM"]:hover { background: var(--block-crm); }
+  .block-btn[data-block="PORTAL"] { border-color: var(--block-portal); color: var(--block-portal); }
+  .block-btn[data-block="PORTAL"].active, .block-btn[data-block="PORTAL"]:hover { background: var(--block-portal); }
+  .block-btn[data-block="DISTRIBUTION"] { border-color: var(--block-dist); color: #8a6a00; }
+  .block-btn[data-block="DISTRIBUTION"].active, .block-btn[data-block="DISTRIBUTION"]:hover { background: var(--block-dist); color: white !important; }
+  .block-btn[data-block="NOTIFY"] { border-color: var(--block-notify); color: var(--block-notify); }
+  .block-btn[data-block="NOTIFY"].active, .block-btn[data-block="NOTIFY"]:hover { background: var(--block-notify); }
+  .block-btn[data-block="ANALYTICS"] { border-color: var(--block-analytics); color: var(--block-analytics); }
+  .block-btn[data-block="ANALYTICS"].active, .block-btn[data-block="ANALYTICS"]:hover { background: var(--block-analytics); }
+  .block-btn[data-block="AUTH"] { border-color: var(--block-auth); color: var(--block-auth); }
+  .block-btn[data-block="AUTH"].active, .block-btn[data-block="AUTH"]:hover { background: var(--block-auth); }
+  .block-btn[data-block="STORAGE"] { border-color: var(--block-storage); color: var(--block-storage); }
+  .block-btn[data-block="STORAGE"].active, .block-btn[data-block="STORAGE"]:hover { background: var(--block-storage); }
+  .block-btn[data-block="ENTERPRISE"] { border-color: var(--block-enterprise); color: var(--block-enterprise); }
+  .block-btn[data-block="ENTERPRISE"].active, .block-btn[data-block="ENTERPRISE"]:hover { background: var(--block-enterprise); }
+
+  .feature-table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--gray-200); background: white; }
+  table.feature-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .feature-table th {
+    background: var(--navy);
+    color: var(--gold-light);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+  .feature-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
+  .feature-table tr:last-child td { border-bottom: none; }
+  .feature-table tr.hidden { display: none; }
+  .feature-table tr:hover td { background: var(--gray-100); }
+  .block-tag {
+    display: inline-block;
+    padding: 0.18rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.04em;
+  }
+  .effort-s { background: #dcfce7; color: #15803d; font-weight: 700; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 4px; }
+  .effort-m { background: #fef9c3; color: #854d0e; font-weight: 700; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 4px; }
+  .effort-l { background: #fee2e2; color: #991b1b; font-weight: 700; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 4px; }
+  .tier-pill {
+    display: inline-block;
+    padding: 0.12rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--gray-100);
+    color: var(--gray-600);
+  }
+
+  /* ── Surface specs ── */
+  .surface-category { margin-bottom: 2rem; }
+  .category-header {
+    background: var(--navy-light);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px 8px 0 0;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+  }
+  .category-header .ch-left { display: flex; align-items: center; gap: 0.75rem; }
+  .category-header .ch-icon { font-size: 1.2rem; }
+  .category-header .ch-arrow { transition: transform 0.2s; }
+  .category-header.open .ch-arrow { transform: rotate(180deg); }
+  .category-body { border: 1px solid var(--gray-200); border-top: none; border-radius: 0 0 8px 8px; }
+
+  .surface-item {
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .surface-item:last-child { border-bottom: none; }
+  .surface-title {
+    padding: 0.9rem 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    transition: background 0.15s;
+  }
+  .surface-title:hover { background: var(--gray-100); }
+  .surface-title h4 { font-size: 0.95rem; font-weight: 600; color: var(--navy); }
+  .surface-title .st-arrow { color: var(--gray-400); font-size: 0.8rem; transition: transform 0.2s; }
+  .surface-title.open .st-arrow { transform: rotate(180deg); }
+  .surface-detail { display: none; padding: 1.25rem; background: var(--off-white); }
+  .surface-detail.open { display: block; }
+
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .spec-block {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .spec-block h5 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray-400);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .spec-block p, .spec-block li {
+    font-size: 0.87rem;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .spec-block ul { list-style: none; }
+  .spec-block li::before { content: '• '; color: var(--gold); }
+  .spec-block ol { padding-left: 1.2rem; }
+  .spec-block ol li::before { content: none; }
+
+  .warning-block {
+    background: #fff5f5;
+    border: 1.5px solid #f87171;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.75rem;
+  }
+  .warning-block h5 {
+    color: #dc2626;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .warning-block ul { list-style: none; }
+  .warning-block li {
+    font-size: 0.87rem;
+    color: #7f1d1d;
+    line-height: 1.55;
+    padding: 0.2rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .warning-block li::before {
+    content: '⚠';
+    position: absolute;
+    left: 0;
+    color: #dc2626;
+  }
+
+  /* ── GTM section ── */
+  .gtm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .gtm-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .gtm-card h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray-400);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .gtm-card p, .gtm-card li {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+  .gtm-card ul { list-style: none; }
+  .gtm-card li { padding: 0.2rem 0; }
+  .gtm-card li::before { content: '→ '; color: var(--gold); font-weight: 700; }
+  .funnel-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    background: var(--navy);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .funnel-step {
+    flex: 1;
+    min-width: 140px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    position: relative;
+    color: white;
+  }
+  .funnel-step:not(:last-child)::after {
+    content: '▶';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 1.2rem;
+    z-index: 2;
+  }
+  .funnel-step .fs-num { font-size: 0.7rem; color: var(--gold-light); font-weight: 700; margin-bottom: 0.2rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .funnel-step .fs-name { font-size: 1rem; font-weight: 700; }
+  .funnel-step .fs-desc { font-size: 0.75rem; color: rgba(255,255,255,0.55); margin-top: 0.2rem; }
+
+  .not-target {
+    background: #fff5f5;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+  }
+  .not-target h4 { color: #dc2626; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+  .not-target ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .not-target li { background: #fee2e2; color: #7f1d1d; font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 999px; }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    border-top: 2px solid var(--gold);
+  }
+  footer span { color: var(--gold); }
+
+  /* ── Utility ── */
+  .divider { height: 1px; background: var(--gray-200); margin: 2rem 0; }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.8rem; }
+    .tiers-grid { grid-template-columns: 1fr; }
+    nav a { padding: 1rem 0.6rem; font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-brand">🎯 LEADPILLAR</div>
+  <a href="#vision">Vision</a>
+  <a href="#tiers">Tiers</a>
+  <a href="#blocks">Feature Blocks</a>
+  <a href="#surfaces">Surface Specs</a>
+  <a href="#gtm">Go-to-Market</a>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-label">Product Map — Confidential — April 2026</div>
+  <h1>The Cleaning Proof <span>Platform</span></h1>
+  <p class="tagline">Every clean leaves evidence. Most of it disappears. We make sure it doesn't.</p>
+  <div class="core-concept">
+    "The product doesn't clean. It protects the proof that the cleaning happened."
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 1 — PRODUCT VISION
+═══════════════════════════════════════════════════════════════ -->
+<div id="vision" class="page-section">
+  <div class="section-header">
+    <div class="section-number">1</div>
+    <div>
+      <h2>Product Vision</h2>
+      <p>The problem, the solution, and why this spreads on its own</p>
+    </div>
+  </div>
+
+  <div class="vision-grid">
+    <div class="vision-card">
+      <div class="vc-icon">📸</div>
+      <h3>The Problem</h3>
+      <p>Cleaning crews photograph every job. Thousands of photos disappear into group chats, personal phones, and cloud folders no one organizes. Facility managers have no visibility. Companies have no liability protection. The proof of excellent work simply evaporates.</p>
+    </div>
+    <div class="vision-card">
+      <div class="vc-icon">📋</div>
+      <h3>The Proof Gap</h3>
+      <p>When a client questions whether a job was done, a cleaning company has nothing. No structured record, no timestamped documentation, no compliance evidence. One complaint becomes a lost contract. One incident becomes a lawsuit. The gap between "we cleaned it" and "we can prove we cleaned it" is where revenue dies.</p>
+    </div>
+    <div class="vision-card">
+      <div class="vc-icon">⚡</div>
+      <h3>The Opportunity</h3>
+      <p>Commercial cleaning companies with 1–10 crews ($500k–$5M revenue) are underserved by software. They can't afford enterprise BSM platforms. They need something that starts with their existing workflow — photos via phone — and builds from there.</p>
+    </div>
+    <div class="vision-card">
+      <div class="vc-icon">🔄</div>
+      <h3>Two Input Modes</h3>
+      <p><strong>MVP1:</strong> Ad-hoc photo flow — crew sends photos + captions, AI structures them into a report.<br><br><strong>MVP2:</strong> Structured task lists — crew works area by area through a predefined checklist, attaches photos per area, report auto-assembles.</p>
+    </div>
+  </div>
+
+  <div class="solution-banner">
+    <div class="sb-icon">💡</div>
+    <div>
+      <h3>The Solution (one sentence)</h3>
+      <p>A Telegram-native platform that turns crew photos into branded post-cleaning reports, structured compliance documentation, and reusable marketing assets — delivered automatically to facility managers after every job.</p>
+    </div>
+  </div>
+
+  <div class="kfactor-box">
+    <div class="kf-icon">🚀</div>
+    <div>
+      <h3>The K-Factor Mechanic — Built-in Viral Distribution</h3>
+      <p>Every report delivered to a facility manager carries a <strong>"Powered by [Product Name]"</strong> badge. The facility manager sees it. Shows it to their colleagues. Passes it to their network. Each report is a product demo delivered to a qualified prospect — at zero acquisition cost.</p>
+      <p style="margin-top:0.5rem;">With 60+ recurring clients at pilot alone, the badge lands in 60+ inboxes every cleaning cycle. That's thousands of impressions per month from one customer.</p>
+      <div class="kfactor-flow">
+        <span class="kf-step">Crew cleans</span>
+        <span class="kf-arrow">→</span>
+        <span class="kf-step">Report generated</span>
+        <span class="kf-arrow">→</span>
+        <span class="kf-step">FM receives report + badge</span>
+        <span class="kf-arrow">→</span>
+        <span class="kf-step">FM asks "what is this?"</span>
+        <span class="kf-arrow">→</span>
+        <span class="kf-step">Product page</span>
+        <span class="kf-arrow">→</span>
+        <span class="kf-step">Demo</span>
+        <span class="kf-arrow">→</span>
+        <span class="kf-step">New customer</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 2 — PRODUCT TIERS
+═══════════════════════════════════════════════════════════════ -->
+<div id="tiers" class="page-section" style="background: var(--gray-100); max-width: 100%; padding: 3rem 2rem;">
+<div style="max-width:1200px;margin:0 auto;">
+  <div class="section-header">
+    <div class="section-number">2</div>
+    <div>
+      <h2>Product Tiers</h2>
+      <p>Five tiers from free to enterprise — designed for modular release by Vlad</p>
+    </div>
+  </div>
+
+  <div class="tiers-grid">
+
+    <!-- TIER 0 -->
+    <div class="tier-card tier0">
+      <div class="tier-card-header">
+        <div class="tier-badge">Tier 0</div>
+        <div class="tier-name">Starter</div>
+        <div class="tier-price">Free</div>
+        <div class="tier-for">For solo operators testing the product with a handful of clients.</div>
+      </div>
+      <div class="tier-card-body">
+        <div class="tier-features">
+          <h4>✅ What's included</h4>
+          <ul>
+            <li><span class="check">✓</span> Telegram bot (photo + caption input)</li>
+            <li><span class="check">✓</span> Up to 5 reports/month</li>
+            <li><span class="check">✓</span> Standard PDF report template</li>
+            <li><span class="check">✓</span> Google Drive storage</li>
+            <li><span class="check">✓</span> "Powered by [Product]" badge on all reports</li>
+            <li><span class="check">✓</span> AI image analysis &amp; alt text</li>
+            <li><span class="check">✓</span> Basic report delivery (Drive link)</li>
+          </ul>
+          <h4>🚫 Not included (upgrade hooks)</h4>
+          <ul>
+            <li><span class="cross">✗</span> <span class="not-included">Custom branding / company logo</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">More than 5 reports/month</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Email delivery to facility manager</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Task checklists</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">SDS/chemical database</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Report archive</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIER 1 -->
+    <div class="tier-card tier1">
+      <div class="tier-card-header">
+        <div class="tier-badge">Tier 1</div>
+        <div class="tier-name">Essential</div>
+        <div class="tier-price">$49 / month</div>
+        <div class="tier-for">For growing cleaning companies wanting branded reports and a professional client experience.</div>
+      </div>
+      <div class="tier-card-body">
+        <div class="tier-features">
+          <h4>✅ What's included</h4>
+          <ul>
+            <li><span class="check">✓</span> Everything in Tier 0</li>
+            <li><span class="check">✓</span> Unlimited reports</li>
+            <li><span class="check">✓</span> Custom company branding (logo, colors)</li>
+            <li><span class="check">✓</span> Email delivery to facility manager</li>
+            <li><span class="check">✓</span> Basic task checklist (flat list per job)</li>
+            <li><span class="check">✓</span> SDS product database (pre-loaded common chemicals)</li>
+            <li><span class="check">✓</span> Report archive (3 months)</li>
+            <li><span class="check">✓</span> Basic consumables notation</li>
+            <li><span class="check">✓</span> Badge remains on reports</li>
+          </ul>
+          <h4>🚫 Not included</h4>
+          <ul>
+            <li><span class="cross">✗</span> <span class="not-included">Area-structured task lists per facility</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Supervisor digital sign-off</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Before/after photo comparison</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Compliance section (OSHA/JC)</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">CRM integration</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Client portal</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIER 2 -->
+    <div class="tier-card tier2">
+      <div class="tier-card-header">
+        <div class="tier-badge">Tier 2</div>
+        <div class="tier-name">Professional</div>
+        <div class="tier-price">$99 / month</div>
+        <div class="tier-for">For established cleaning companies that need structured operations, compliance documentation, and CRM visibility.</div>
+      </div>
+      <div class="tier-card-body">
+        <div class="tier-features">
+          <h4>✅ What's included</h4>
+          <ul>
+            <li><span class="check">✓</span> Everything in Tier 1</li>
+            <li><span class="check">✓</span> Area-structured task lists per facility</li>
+            <li><span class="check">✓</span> Live task completion tracker (supervisor view)</li>
+            <li><span class="check">✓</span> Supervisor digital sign-off</li>
+            <li><span class="check">✓</span> Before/after photo comparison in report</li>
+            <li><span class="check">✓</span> Compliance documentation section (OSHA refs, Joint Commission ready)</li>
+            <li><span class="check">✓</span> Custom SDS entries (add your own products)</li>
+            <li><span class="check">✓</span> Consumables tracking (restocking notes per visit)</li>
+            <li><span class="check">✓</span> Basic CRM integration (log visit, attach report)</li>
+            <li><span class="check">✓</span> Report archive (12 months)</li>
+            <li><span class="check">✓</span> Email + SMS delivery options</li>
+          </ul>
+          <h4>🚫 Not included</h4>
+          <ul>
+            <li><span class="cross">✗</span> <span class="not-included">Client portal (FM self-service)</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Audit pack generator</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Multi-location support</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Custom compliance templates</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">API access</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIER 3 -->
+    <div class="tier-card tier3">
+      <div class="tier-card-header">
+        <div class="tier-badge">Tier 3</div>
+        <div class="tier-name">Business</div>
+        <div class="tier-price">$199 / month</div>
+        <div class="tier-for">For scaling operations that serve multiple locations and want clients to self-serve their report history.</div>
+      </div>
+      <div class="tier-card-body">
+        <div class="tier-features">
+          <h4>✅ What's included</h4>
+          <ul>
+            <li><span class="check">✓</span> Everything in Tier 2</li>
+            <li><span class="check">✓</span> Client portal (facility manager login)</li>
+            <li><span class="check">✓</span> Audit pack generator (on-demand period PDF)</li>
+            <li><span class="check">✓</span> Multi-location support (unique task lists per site)</li>
+            <li><span class="check">✓</span> Custom compliance templates (OSHA, JC, state-specific)</li>
+            <li><span class="check">✓</span> Full CRM integration (PipeDrive / HubSpot)</li>
+            <li><span class="check">✓</span> API access</li>
+            <li><span class="check">✓</span> Analytics dashboard (visit frequency, coverage, trends)</li>
+            <li><span class="check">✓</span> Priority support</li>
+            <li><span class="check">✓</span> Badge optional (can remove — but why would they?)</li>
+          </ul>
+          <h4>🚫 Not included</h4>
+          <ul>
+            <li><span class="cross">✗</span> <span class="not-included">White-label (own domain/branding)</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Multi-crew management dashboard</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Franchise/network support</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Custom integrations (ERP, etc.)</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">Dedicated onboarding</span></li>
+            <li><span class="cross">✗</span> <span class="not-included">SLA</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIER 4 -->
+    <div class="tier-card tier4">
+      <div class="tier-card-header">
+        <div class="tier-badge">Tier 4</div>
+        <div class="tier-name">Enterprise</div>
+        <div class="tier-price">Custom Pricing</div>
+        <div class="tier-for">For franchise networks, regional chains, and operators who want to white-label the platform as their own product.</div>
+      </div>
+      <div class="tier-card-body">
+        <div class="tier-features">
+          <h4>✅ What's included</h4>
+          <ul>
+            <li><span class="check">✓</span> Everything in Tier 3</li>
+            <li><span class="check">✓</span> White-label (custom domain, branding, app name)</li>
+            <li><span class="check">✓</span> Multi-crew management (many crews, one account)</li>
+            <li><span class="check">✓</span> Franchise/network support (one account → many franchisees)</li>
+            <li><span class="check">✓</span> Custom integrations (ERP, proprietary CRM, scheduling systems)</li>
+            <li><span class="check">✓</span> Dedicated onboarding manager</li>
+            <li><span class="check">✓</span> SLA (uptime guarantee, response time)</li>
+            <li><span class="check">✓</span> Custom report templates</li>
+            <li><span class="check">✓</span> Bulk crew onboarding tools</li>
+            <li><span class="check">✓</span> Full audit log and data export</li>
+            <li><span class="check">✓</span> Badge removal available</li>
+          </ul>
+          <h4>💬 Contact</h4>
+          <ul>
+            <li><span class="check">→</span> Pricing based on crew count &amp; location volume</li>
+            <li><span class="check">→</span> Minimum 3-month commitment</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 3 — FEATURE BLOCK MAP
+═══════════════════════════════════════════════════════════════ -->
+<div id="blocks" class="page-section">
+  <div class="section-header">
+    <div class="section-number">3</div>
+    <div>
+      <h2>Feature Block Map</h2>
+      <p>For Vlad — independently buildable/releasable blocks with effort estimates. Filter by block below.</p>
+    </div>
+  </div>
+
+  <div class="block-filter">
+    <button class="block-btn active" data-block="ALL">ALL</button>
+    <button class="block-btn" data-block="CORE">CORE</button>
+    <button class="block-btn" data-block="REPORT">REPORT</button>
+    <button class="block-btn" data-block="TASK">TASK</button>
+    <button class="block-btn" data-block="COMPLIANCE">COMPLIANCE</button>
+    <button class="block-btn" data-block="CRM">CRM</button>
+    <button class="block-btn" data-block="PORTAL">PORTAL</button>
+    <button class="block-btn" data-block="DISTRIBUTION">DISTRIBUTION</button>
+    <button class="block-btn" data-block="NOTIFY">NOTIFY</button>
+    <button class="block-btn" data-block="ANALYTICS">ANALYTICS</button>
+    <button class="block-btn" data-block="AUTH">AUTH</button>
+    <button class="block-btn" data-block="STORAGE">STORAGE</button>
+    <button class="block-btn" data-block="ENTERPRISE">ENTERPRISE</button>
+  </div>
+
+  <div class="feature-table-wrap">
+    <table class="feature-table" id="featureTable">
+      <thead>
+        <tr>
+          <th>Block</th>
+          <th>Feature</th>
+          <th>Tier</th>
+          <th>Description</th>
+          <th>Effort</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- CORE -->
+        <tr data-block="CORE"><td><span class="block-tag" style="background:var(--block-core)">CORE</span></td><td>Telegram bot receiver</td><td><span class="tier-pill">All</span></td><td>Receives photos, captions, commands from crew via Telegram</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="CORE"><td><span class="block-tag" style="background:var(--block-core)">CORE</span></td><td>Image processor</td><td><span class="tier-pill">All</span></td><td>Renames images, generates AI alt text, extracts metadata</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="CORE"><td><span class="block-tag" style="background:var(--block-core)">CORE</span></td><td>Job session manager</td><td><span class="tier-pill">All</span></td><td>Opens/closes job sessions, groups photos by job/facility</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="CORE"><td><span class="block-tag" style="background:var(--block-core)">CORE</span></td><td>AI content structurer</td><td><span class="tier-pill">All</span></td><td>Claude analyzes photos/captions, structures into report content</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="CORE"><td><span class="block-tag" style="background:var(--block-core)">CORE</span></td><td>Client/facility registry</td><td><span class="tier-pill">All</span></td><td>Maps Telegram users to client accounts and facility records</td><td><span class="effort-s">S</span></td></tr>
+        <!-- REPORT -->
+        <tr data-block="REPORT"><td><span class="block-tag" style="background:var(--block-report)">REPORT</span></td><td>Basic PDF generator</td><td><span class="tier-pill">0+</span></td><td>HTML→PDF conversion, standard template, product badge</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="REPORT"><td><span class="block-tag" style="background:var(--block-report)">REPORT</span></td><td>Branded PDF</td><td><span class="tier-pill">1+</span></td><td>Company logo, colors, custom header/footer injected into template</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="REPORT"><td><span class="block-tag" style="background:var(--block-report)">REPORT</span></td><td>Before/after comparison</td><td><span class="tier-pill">2+</span></td><td>Side-by-side photo layout in report PDF</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="REPORT"><td><span class="block-tag" style="background:var(--block-report)">REPORT</span></td><td>Photo gallery section</td><td><span class="tier-pill">0+</span></td><td>Grid layout of all job photos with AI captions</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="REPORT"><td><span class="block-tag" style="background:var(--block-report)">REPORT</span></td><td>Report template engine</td><td><span class="tier-pill">0+</span></td><td>Modular section system — include/exclude sections per tier</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="REPORT"><td><span class="block-tag" style="background:var(--block-report)">REPORT</span></td><td>Custom report templates</td><td><span class="tier-pill">4</span></td><td>Enterprise-defined section layout and branding</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="REPORT"><td><span class="block-tag" style="background:var(--block-report)">REPORT</span></td><td>Marketing asset extractor</td><td><span class="tier-pill">2+</span></td><td>Flag photos as reusable marketing assets, export set</td><td><span class="effort-s">S</span></td></tr>
+        <!-- TASK -->
+        <tr data-block="TASK"><td><span class="block-tag" style="background:var(--block-task)">TASK</span></td><td>Basic checklist</td><td><span class="tier-pill">1+</span></td><td>Flat task list per job, crew checks off via Telegram</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="TASK"><td><span class="block-tag" style="background:var(--block-task)">TASK</span></td><td>Area-structured checklist</td><td><span class="tier-pill">2+</span></td><td>Tasks grouped by room/area, photo required per area</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="TASK"><td><span class="block-tag" style="background:var(--block-task)">TASK</span></td><td>Live completion tracker</td><td><span class="tier-pill">2+</span></td><td>Supervisor sees real-time checklist status during job</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="TASK"><td><span class="block-tag" style="background:var(--block-task)">TASK</span></td><td>Facility task list editor</td><td><span class="tier-pill">2+</span></td><td>Admin UI to create/edit task lists per facility</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="TASK"><td><span class="block-tag" style="background:var(--block-task)">TASK</span></td><td>Multi-location task sets</td><td><span class="tier-pill">3+</span></td><td>Different task lists for different sites under one account</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="TASK"><td><span class="block-tag" style="background:var(--block-task)">TASK</span></td><td>Supervisor sign-off</td><td><span class="tier-pill">2+</span></td><td>Digital sign-off captured, recorded in report with timestamp</td><td><span class="effort-s">S</span></td></tr>
+        <!-- COMPLIANCE -->
+        <tr data-block="COMPLIANCE"><td><span class="block-tag" style="background:var(--block-compliance)">COMPLIANCE</span></td><td>SDS database (pre-loaded)</td><td><span class="tier-pill">1+</span></td><td>Safety Data Sheets for common cleaning chemicals, searchable</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="COMPLIANCE"><td><span class="block-tag" style="background:var(--block-compliance)">COMPLIANCE</span></td><td>Custom SDS entries</td><td><span class="tier-pill">2+</span></td><td>Add proprietary or specialty products to the database</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="COMPLIANCE"><td><span class="block-tag" style="background:var(--block-compliance)">COMPLIANCE</span></td><td>Compliance section in report</td><td><span class="tier-pill">2+</span></td><td>OSHA references, Joint Commission standards cited in report</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="COMPLIANCE"><td><span class="block-tag" style="background:var(--block-compliance)">COMPLIANCE</span></td><td>Custom compliance templates</td><td><span class="tier-pill">3+</span></td><td>Client-specific standards (JC, OSHA, state regs)</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="COMPLIANCE"><td><span class="block-tag" style="background:var(--block-compliance)">COMPLIANCE</span></td><td>Surface specs library</td><td><span class="tier-pill">1+</span></td><td>Reference library of cleaning specs per surface type (in-product)</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="COMPLIANCE"><td><span class="block-tag" style="background:var(--block-compliance)">COMPLIANCE</span></td><td>Consumables tracker</td><td><span class="tier-pill">2+</span></td><td>Log chemicals used per visit, restocking alerts</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="COMPLIANCE"><td><span class="block-tag" style="background:var(--block-compliance)">COMPLIANCE</span></td><td>Audit pack generator</td><td><span class="tier-pill">3+</span></td><td>Compile all reports for a date range into single audit PDF</td><td><span class="effort-m">M</span></td></tr>
+        <!-- CRM -->
+        <tr data-block="CRM"><td><span class="block-tag" style="background:var(--block-crm)">CRM</span></td><td>Basic visit log</td><td><span class="tier-pill">2+</span></td><td>Log visit date, crew, facility against client record</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="CRM"><td><span class="block-tag" style="background:var(--block-crm)">CRM</span></td><td>Report attachment to CRM</td><td><span class="tier-pill">2+</span></td><td>Attach PDF report to CRM deal/contact record</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="CRM"><td><span class="block-tag" style="background:var(--block-crm)">CRM</span></td><td>Full CRM integration</td><td><span class="tier-pill">3+</span></td><td>Bi-directional sync with PipeDrive / HubSpot</td><td><span class="effort-m">M</span></td></tr>
+        <!-- PORTAL -->
+        <tr data-block="PORTAL"><td><span class="block-tag" style="background:var(--block-portal)">PORTAL</span></td><td>Client portal</td><td><span class="tier-pill">3+</span></td><td>Facility manager login, view all their reports, download PDFs</td><td><span class="effort-l">L</span></td></tr>
+        <tr data-block="PORTAL"><td><span class="block-tag" style="background:var(--block-portal)">PORTAL</span></td><td>Portal audit pack generator</td><td><span class="tier-pill">3+</span></td><td>FM self-serves period summary PDF from portal</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="PORTAL"><td><span class="block-tag" style="background:var(--block-portal)">PORTAL</span></td><td>Admin dashboard</td><td><span class="tier-pill">1+</span></td><td>Cleaning company admin: clients, reports, settings, billing</td><td><span class="effort-l">L</span></td></tr>
+        <!-- DISTRIBUTION -->
+        <tr data-block="DISTRIBUTION"><td><span class="block-tag" style="background:var(--block-dist)">DISTRIBUTION</span></td><td>Badge on report</td><td><span class="tier-pill">All</span></td><td>"Powered by [Product]" badge — K-factor viral mechanic</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="DISTRIBUTION"><td><span class="block-tag" style="background:var(--block-dist)">DISTRIBUTION</span></td><td>Badge removal option</td><td><span class="tier-pill">4</span></td><td>Enterprise white-label removes badge; standard tiers cannot</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="DISTRIBUTION"><td><span class="block-tag" style="background:var(--block-dist)">DISTRIBUTION</span></td><td>Product landing page</td><td><span class="tier-pill">All</span></td><td>Badge links to product page with demo CTA</td><td><span class="effort-s">S</span></td></tr>
+        <!-- NOTIFY -->
+        <tr data-block="NOTIFY"><td><span class="block-tag" style="background:var(--block-notify)">NOTIFY</span></td><td>Drive link delivery</td><td><span class="tier-pill">0+</span></td><td>Send report Drive link via Telegram to operator</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="NOTIFY"><td><span class="block-tag" style="background:var(--block-notify)">NOTIFY</span></td><td>Email delivery</td><td><span class="tier-pill">1+</span></td><td>Auto-email report PDF to facility manager after job</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="NOTIFY"><td><span class="block-tag" style="background:var(--block-notify)">NOTIFY</span></td><td>SMS delivery</td><td><span class="tier-pill">2+</span></td><td>Send report link via SMS to FM</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="NOTIFY"><td><span class="block-tag" style="background:var(--block-notify)">NOTIFY</span></td><td>Restocking alert</td><td><span class="tier-pill">2+</span></td><td>Alert sent when consumable stock falls below threshold</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="NOTIFY"><td><span class="block-tag" style="background:var(--block-notify)">NOTIFY</span></td><td>Crew job assignment notify</td><td><span class="tier-pill">2+</span></td><td>Crew receives job details and task list via Telegram at job start</td><td><span class="effort-s">S</span></td></tr>
+        <!-- ANALYTICS -->
+        <tr data-block="ANALYTICS"><td><span class="block-tag" style="background:var(--block-analytics)">ANALYTICS</span></td><td>Usage dashboard</td><td><span class="tier-pill">3+</span></td><td>Reports generated, clients served, photo volume, trends</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="ANALYTICS"><td><span class="block-tag" style="background:var(--block-analytics)">ANALYTICS</span></td><td>Visit frequency report</td><td><span class="tier-pill">3+</span></td><td>How often each facility is serviced; flag missed visits</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="ANALYTICS"><td><span class="block-tag" style="background:var(--block-analytics)">ANALYTICS</span></td><td>Crew performance metrics</td><td><span class="tier-pill">4</span></td><td>Per-crew job counts, completion rates, photo quality scores</td><td><span class="effort-m">M</span></td></tr>
+        <!-- AUTH -->
+        <tr data-block="AUTH"><td><span class="block-tag" style="background:var(--block-auth)">AUTH</span></td><td>Telegram auth (crew)</td><td><span class="tier-pill">All</span></td><td>Crew identity via Telegram user ID</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="AUTH"><td><span class="block-tag" style="background:var(--block-auth)">AUTH</span></td><td>Web auth (admin/portal)</td><td><span class="tier-pill">1+</span></td><td>Email/password or SSO for admin dashboard and client portal</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="AUTH"><td><span class="block-tag" style="background:var(--block-auth)">AUTH</span></td><td>Role-based access</td><td><span class="tier-pill">2+</span></td><td>Owner / supervisor / crew / client roles with permission sets</td><td><span class="effort-m">M</span></td></tr>
+        <!-- STORAGE -->
+        <tr data-block="STORAGE"><td><span class="block-tag" style="background:var(--block-storage)">STORAGE</span></td><td>Google Drive storage</td><td><span class="tier-pill">All</span></td><td>Photos and PDFs stored in client-specific Drive folders</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="STORAGE"><td><span class="block-tag" style="background:var(--block-storage)">STORAGE</span></td><td>Report archive</td><td><span class="tier-pill">1+</span></td><td>Indexed report archive (3mo T1, 12mo T2, unlimited T3+)</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="STORAGE"><td><span class="block-tag" style="background:var(--block-storage)">STORAGE</span></td><td>Data export</td><td><span class="tier-pill">4</span></td><td>Full data export (JSON, CSV) for enterprise compliance</td><td><span class="effort-s">S</span></td></tr>
+        <!-- ENTERPRISE -->
+        <tr data-block="ENTERPRISE"><td><span class="block-tag" style="background:var(--block-enterprise)">ENTERPRISE</span></td><td>White-label</td><td><span class="tier-pill">4</span></td><td>Custom domain, brand name, logo throughout product</td><td><span class="effort-l">L</span></td></tr>
+        <tr data-block="ENTERPRISE"><td><span class="block-tag" style="background:var(--block-enterprise)">ENTERPRISE</span></td><td>Multi-crew management</td><td><span class="tier-pill">4</span></td><td>Crew groups, schedules, assignments at scale</td><td><span class="effort-m">M</span></td></tr>
+        <tr data-block="ENTERPRISE"><td><span class="block-tag" style="background:var(--block-enterprise)">ENTERPRISE</span></td><td>Franchise/network support</td><td><span class="tier-pill">4</span></td><td>Parent account manages franchisee sub-accounts</td><td><span class="effort-l">L</span></td></tr>
+        <tr data-block="ENTERPRISE"><td><span class="block-tag" style="background:var(--block-enterprise)">ENTERPRISE</span></td><td>Custom integrations</td><td><span class="tier-pill">4</span></td><td>ERP, proprietary CRM, scheduling/dispatch systems</td><td><span class="effort-l">L</span></td></tr>
+        <tr data-block="ENTERPRISE"><td><span class="block-tag" style="background:var(--block-enterprise)">ENTERPRISE</span></td><td>Bulk crew onboarding</td><td><span class="tier-pill">4</span></td><td>CSV import of crew members, auto-provision Telegram bot access</td><td><span class="effort-s">S</span></td></tr>
+        <tr data-block="ENTERPRISE"><td><span class="block-tag" style="background:var(--block-enterprise)">ENTERPRISE</span></td><td>SLA monitoring</td><td><span class="tier-pill">4</span></td><td>Uptime tracking, incident response, SLA reporting</td><td><span class="effort-m">M</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 4 — SURFACE CLEANING SPECIFICATIONS
+═══════════════════════════════════════════════════════════════ -->
+<div id="surfaces" class="page-section" style="background: #f4f3f0; max-width:100%; padding: 3rem 2rem;">
+<div style="max-width:1200px;margin:0 auto;">
+  <div class="section-header">
+    <div class="section-number">4</div>
+    <div>
+      <h2>Surface Cleaning Specifications Library</h2>
+      <p>Authoritative reference for every commercial surface type. Click a category to expand. Click a surface for full spec detail.</p>
+    </div>
+  </div>
+
+  <!-- ── STONE FLOORS ── -->
+  <div class="surface-category">
+    <div class="category-header" onclick="toggleCategory(this)">
+      <span class="ch-left"><span class="ch-icon">🪨</span> Stone Floors</span>
+      <span class="ch-arrow">▼</span>
+    </div>
+    <div class="category-body" style="display:none;">
+
+      <!-- Polished Marble -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)">
+          <h4>Polished Marble (Carrara, Calacatta, Emperador)</h4>
+          <span class="st-arrow">▼</span>
+        </div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block">
+              <h5>Surface Category</h5>
+              <p>Natural Stone — Calcite-based</p>
+              <p style="margin-top:0.4rem;font-size:0.82rem;color:#666;"><strong>Carrara:</strong> White/grey, fine grain, relatively affordable. <strong>Calacatta:</strong> Bright white with dramatic gold/grey veining, premium pricing. <strong>Emperador:</strong> Dark brown marble, Spanish origin, highly sensitive to acid.</p>
+            </div>
+            <div class="spec-block">
+              <h5>Approved Chemicals</h5>
+              <ul>
+                <li>Stone-specific neutral cleaner, pH 7.0–8.0, dilution 1:50, dwell time 2 min</li>
+                <li>Distilled or deionized water rinse</li>
+                <li>Marble-safe impregnating sealer (annual application)</li>
+              </ul>
+            </div>
+            <div class="spec-block">
+              <h5>Prohibited Chemicals</h5>
+              <ul>
+                <li>Any acid-based cleaner (pH &lt;7) — vinegar, citrus, bathroom descalers</li>
+                <li>Bleach / sodium hypochlorite — discolors veining</li>
+                <li>Ammonia-based cleaners — dull polish</li>
+                <li>Multi-surface cleaners (usually pH 4–6)</li>
+                <li>Abrasive scrubbing compounds</li>
+              </ul>
+            </div>
+            <div class="spec-block">
+              <h5>Equipment</h5>
+              <ul>
+                <li>Microfiber flat mop (white or yellow pad only)</li>
+                <li>Two-bucket system: solution + rinse</li>
+                <li>Soft microfiber buffing cloth for drying</li>
+                <li>No rotary machines unless equipped with diamond pads for polish maintenance (specialist only)</li>
+              </ul>
+            </div>
+            <div class="spec-block">
+              <h5>Process</h5>
+              <ol>
+                <li>Dry dust mop to remove grit (grit = scratch risk)</li>
+                <li>Mix neutral stone cleaner at 1:50 in bucket</li>
+                <li>Damp mop in overlapping passes — do not flood</li>
+                <li>Rinse with clean water (second bucket)</li>
+                <li>Dry buff immediately with microfiber — no standing water</li>
+                <li>Inspect for etch marks or dull spots — report immediately</li>
+              </ol>
+            </div>
+            <div class="spec-block">
+              <h5>Timing</h5>
+              <p><strong>Dwell time:</strong> 2 minutes max for cleaner</p>
+              <p><strong>Dry time:</strong> Buff dry immediately — do not allow air-dry (water spots etch over time)</p>
+              <p><strong>Frequency:</strong> Daily damp mop; deep clean monthly; seal annually</p>
+            </div>
+            <div class="spec-block">
+              <h5>Preventive Maintenance</h5>
+              <ul>
+                <li>Apply impregnating sealer annually (or bi-annually in high-traffic)</li>
+                <li>Place walk-off mats at all entrances to reduce grit ingress</li>
+                <li>Address spills immediately — liquid dwell = etch risk</li>
+                <li>Repolish with diamond pad system every 2–3 years (specialist service)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="warning-block">
+            <h5>⚠ Warning Flags</h5>
+            <ul>
+              <li>Acidic cleaners (pH &lt;7) on marble etch the surface within 30 seconds of contact, creating a permanent dull spot visible from 10 feet. Professional re-honing costs $8–$25/sq ft. A single misapplication on a $50,000 lobby is a liability event.</li>
+              <li>Calacatta is more porous than Carrara — etching risk is higher. Emperador is the most sensitive; even short acid exposure causes visible damage.</li>
+              <li>Ammonia-based glass cleaners used on marble surfaces (common error when cleaning adjacent glass) will gradually degrade the polish — damage is cumulative and irreversible without re-honing.</li>
+              <li>Wet mop left sitting on polished marble overnight will leave tide marks requiring professional buffing to remove.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Honed Marble -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)">
+          <h4>Honed Marble</h4>
+          <span class="st-arrow">▼</span>
+        </div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Natural Stone — Calcite-based, matte finish</p></div>
+            <div class="spec-block">
+              <h5>Approved Chemicals</h5>
+              <ul>
+                <li>pH-neutral stone cleaner (7.0–8.0), 1:50, 2 min dwell</li>
+                <li>Distilled water rinse</li>
+              </ul>
+            </div>
+            <div class="spec-block">
+              <h5>Prohibited Chemicals</h5>
+              <ul>
+                <li>All acidic cleaners — same risk as polished but etching is LESS visible on honed initially, leading to progressive undetected damage</li>
+                <li>Oil-based soaps — honed marble absorbs oils, darkens permanently</li>
+                <li>Wax/polish products — not compatible with honed finish</li>
+              </ul>
+            </div>
+            <div class="spec-block">
+              <h5>Equipment &amp; Process</h5>
+              <ul>
+                <li>Microfiber flat mop (same as polished)</li>
+                <li>Dust mop first to remove grit</li>
+                <li>Damp mop with neutral solution</li>
+                <li>Rinse and buff dry</li>
+                <li>Honed surfaces show fingerprints and water spots more on dark colorways — buff thoroughly</li>
+              </ul>
+            </div>
+            <div class="spec-block">
+              <h5>Timing &amp; Frequency</h5>
+              <p><strong>Dwell:</strong> 2 min max</p>
+              <p><strong>Frequency:</strong> Daily damp mop; seal more frequently than polished (honed is more porous)</p>
+            </div>
+            <div class="spec-block">
+              <h5>Preventive Maintenance</h5>
+              <ul>
+                <li>Seal every 6 months (more frequently than polished)</li>
+                <li>Penetrating sealer only — no topical sealers</li>
+                <li>Address spills faster than polished marble</li>
+              </ul>
+            </div>
+          </div>
+          <div class="warning-block">
+            <h5>⚠ Warning Flags</h5>
+            <ul>
+              <li>Honed marble hides early acid etching — crews may not notice damage until it becomes severe. By then, re-honing the entire floor is required, not just spot treatment.</li>
+              <li>Oil-based soaps (common in hospitality settings) permanently darken honed marble. There is no chemical fix — the oil must be professionally drawn out with a poultice, and even then results are inconsistent.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Travertine -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)">
+          <h4>Travertine (Filled vs Unfilled)</h4>
+          <span class="st-arrow">▼</span>
+        </div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Natural Stone — Limestone family, highly porous, often has surface voids (filled with grout or left open)</p></div>
+            <div class="spec-block">
+              <h5>Approved Chemicals</h5>
+              <ul>
+                <li>pH-neutral stone cleaner (7.0–8.0), 1:50</li>
+                <li>Travertine-specific rinse-free cleaner for daily maintenance</li>
+              </ul>
+            </div>
+            <div class="spec-block">
+              <h5>Prohibited Chemicals</h5>
+              <ul>
+                <li>All acids — travertine is calcite-based, highly reactive to acid</li>
+                <li>Alkaline cleaners above pH 10 — damages fillers in filled travertine</li>
+                <li>Steam cleaning on unfilled travertine — forces water into voids</li>
+              </ul>
+            </div>
+            <div class="spec-block">
+              <h5>Equipment &amp; Process</h5>
+              <ul>
+                <li>Dust mop — critical as grit scratches soft surface</li>
+                <li>Damp microfiber mop with very light moisture</li>
+                <li>Unfilled: use minimal water, dry immediately</li>
+                <li>Filled: standard damp mop acceptable</li>
+                <li>Blot spills immediately</li>
+              </ul>
+            </div>
+            <div class="spec-block">
+              <h5>Frequency</h5>
+              <p>Daily dust mop; damp mop 2–3x/week; seal every 6 months</p>
+            </div>
+            <div class="spec-block">
+              <h5>Preventive Maintenance</h5>
+              <ul>
+                <li>Penetrating sealer every 6 months</li>
+                <li>Inspect and re-grout filled holes annually</li>
+                <li>Walk-off mats mandatory at all entries</li>
+              </ul>
+            </div>
+          </div>
+          <div class="warning-block">
+            <h5>⚠ Warning Flags</h5>
+            <ul>
+              <li>Unfilled travertine with standing water will absorb moisture into voids, causing subsurface damage and eventual cracking of the stone. Never wet mop and leave.</li>
+              <li>Travertine is softer than marble (Mohs 3–4). Grit from shoes that gets trapped under a mop pad acts like sandpaper — always dust mop first without exception.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Limestone -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Limestone</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Natural Stone — Sedimentary, calcite-based, very soft (Mohs 3). Most acid-sensitive of all commercial stone floors.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>pH-neutral stone cleaner strictly 7.0–8.5</li><li>Rinse with distilled water only (tap water minerals leave deposits on limestone)</li></ul></div>
+            <div class="spec-block"><h5>Prohibited Chemicals</h5><ul><li>Any acid — will etch faster than marble or travertine</li><li>Hard water (use distilled for rinsing)</li><li>Alkaline degreasers above pH 9</li><li>Wax or polish</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Dust mop</li><li>Damp mop with neutral solution (barely damp)</li><li>Rinse with distilled water</li><li>Dry immediately</li></ol></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily dust mop; light damp mop weekly; seal every 6–12 months</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Limestone is the most vulnerable commercial stone — even brief contact with citrus-based hand soap tracked onto the floor will etch visible marks within minutes. All adjacent areas (reception, café, lobby) must use non-acid products without exception.</li><li>Tap water with high mineral content leaves calcium deposits on limestone that are extremely difficult to remove without acid (which damages the stone). Use distilled water for all rinse steps.</li></ul></div>
+        </div>
+      </div>
+
+      <!-- Granite -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Granite (Polished vs Flamed)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Natural Stone — Igneous, silica-based (Mohs 6–7). Much harder and more durable than calcite stones. More forgiving with cleaning chemicals but not immune.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>pH-neutral to mildly alkaline (7.0–9.5), 1:50</li><li>Stone-safe degreaser at pH 9.0–9.5 for kitchen areas</li></ul></div>
+            <div class="spec-block"><h5>Prohibited Chemicals</h5><ul><li>Bleach over 5% concentration — can affect sealant</li><li>Strong acids — technically tolerated short-term but damages sealant and over time pits surface</li><li>Oil-based cleaners on polished — residue attracts soil</li></ul></div>
+            <div class="spec-block"><h5>Process — Polished</h5><ol><li>Dust mop</li><li>Damp mop with neutral/mild alkaline solution</li><li>Rinse and dry</li><li>Buff with dry microfiber for shine</li></ol></div>
+            <div class="spec-block"><h5>Process — Flamed</h5><ul><li>Flamed finish is rougher, textured surface — use stiffer scrub brush for soiled areas</li><li>Allow longer dwell on heavy soiling (5 min)</li><li>Rinse thoroughly — rough texture traps cleaner residue</li></ul></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily damp mop; seal annually (polished); flamed may not require sealing depending on finish</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Flamed granite's rough texture traps cleaning product residue — inadequate rinsing leaves a sticky film that attracts more soil and defeats the purpose of cleaning.</li><li>Granite often installed near marble (mixed stone lobbies) — ensure crew distinguishes surfaces and uses appropriate products for each. Using marble cleaner on granite is fine; using granite degreaser on marble is a liability event.</li></ul></div>
+        </div>
+      </div>
+
+      <!-- Slate -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Slate</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Natural Stone — Metamorphic, silica/clay-based. Cleft (natural split) or honed surface. Naturally non-slip. Common in commercial entryways.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>pH-neutral cleaner (6.5–9.0)</li><li>Mild alkaline for degreasing (pH 8–9.5)</li></ul></div>
+            <div class="spec-block"><h5>Prohibited Chemicals</h5><ul><li>Wax or acrylic floor finish — seals into the cleft surface unevenly, peels</li><li>Strong oxidizing agents</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Dust mop or vacuum (cleft surface traps debris)</li><li>Scrub with neutral solution and stiff brush on heavily soiled areas</li><li>Damp mop overall</li><li>Rinse thoroughly</li><li>Allow to air dry — slate is naturally non-slip even wet</li></ol></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily sweep/vacuum; weekly damp mop; seal annually with penetrating sealer</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Applying wax or floor finish to slate produces an uneven, patchy appearance that is extremely difficult to strip. The cleft texture prevents even application and film-forming products peel within weeks.</li><li>Some slate (particularly Indian slate) is laminate-structured and will delaminate if soaked with water. Minimal moisture and immediate drying is essential.</li></ul></div>
+        </div>
+      </div>
+
+      <!-- Terrazzo -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Terrazzo (Traditional Cement vs Epoxy)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Composite Stone — Marble/granite chips in cement (traditional) or epoxy (modern) binder. Polished. <strong>Critical distinction:</strong> cement and epoxy binders have very different chemical tolerances.</p></div>
+            <div class="spec-block"><h5>Approved — Traditional (Cement) Terrazzo</h5><ul><li>pH-neutral cleaner (7.0–9.0)</li><li>No acid, no strong alkali</li></ul></div>
+            <div class="spec-block"><h5>Approved — Epoxy Terrazzo</h5><ul><li>pH 3–11 tolerated (more chemically resistant)</li><li>Mild alkaline degreaser acceptable</li><li>Mild acid descaler acceptable for mineral deposits (not on cement terrazzo)</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Dust mop or auto-scrubber dry pass</li><li>Auto-scrubber with appropriate pad (red: light scrub) or damp mop</li><li>Rinse</li><li>Dry buff for high polish</li></ol></div>
+            <div class="spec-block"><h5>Auto-Scrubber Settings</h5><ul><li>Red pad (medium): routine cleaning</li><li>White pad: polish/buff</li><li>Never use black or brown stripping pads</li></ul></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily damp mop; monthly machine scrub; repolish annually</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Using acid cleaner on traditional cement terrazzo attacks the binder matrix, not just the stone chips. Visible pitting occurs within one use. Restoration requires diamond grinding and repolishing — a $15–$30/sq ft repair on what is often a heritage floor.</li><li>Never assume terrazzo type without confirming with the facility. When in doubt, use pH-neutral only on both types.</li><li>Stripping pads (brown/black) used on terrazzo will remove the polish and gouge the surface. Machine work requires explicit supervisor approval and correct pad selection.</li></ul></div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /stone floors -->
+
+  <!-- ── HARD FLOORS ── -->
+  <div class="surface-category">
+    <div class="category-header" onclick="toggleCategory(this)">
+      <span class="ch-left"><span class="ch-icon">🏢</span> Hard Floors</span>
+      <span class="ch-arrow">▼</span>
+    </div>
+    <div class="category-body" style="display:none;">
+
+      <!-- VCT -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>VCT — Vinyl Composition Tile (Strip &amp; Wax Process)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Synthetic Resilient Floor — Most common commercial floor tile. Requires periodic strip and wax cycle. Found in schools, hospitals, retail, warehouses.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>Daily: neutral floor cleaner pH 7.0–9.0, 1:64</li><li>Strip: alkaline stripper pH 12–13, undiluted or 1:4 for heavy buildup</li><li>Wax/finish: acrylic floor finish (water-based)</li></ul></div>
+            <div class="spec-block"><h5>Prohibited Chemicals</h5><ul><li>Acidic cleaners — attacks finish layers</li><li>Oil-based soaps — prevents finish adhesion</li><li>Solvent-based products — dissolves VCT tile itself</li></ul></div>
+            <div class="spec-block"><h5>Daily Cleaning Process</h5><ol><li>Sweep or dust mop</li><li>Damp mop with diluted neutral cleaner</li><li>Allow to dry completely before foot traffic</li></ol></div>
+            <div class="spec-block"><h5>Strip &amp; Wax Process</h5><ol><li>Wet floor with stripping solution, allow 10–15 min dwell</li><li>Agitate with low-speed buffer (175 RPM), black stripping pad</li><li>Extract slurry with wet vac</li><li>Rinse floor 2–3× with clean water</li><li>Neutralize with pH 7 rinse and allow to dry completely (30–60 min)</li><li>Apply first coat of floor finish in thin, even strokes</li><li>Dry 30–45 min between coats</li><li>Apply 3–5 coats total</li><li>Allow final coat to cure 2–4 hours before traffic</li></ol></div>
+            <div class="spec-block"><h5>Equipment</h5><ul><li>Low-speed buffer 175 RPM: black pad (strip), red pad (scrub), white pad (buff)</li><li>High-speed burnisher 1500–2000 RPM: white/champagne pad (buff to gloss)</li><li>Wet vacuum for slurry removal</li><li>Microfiber flat mop for finish application</li></ul></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily damp mop; scrub &amp; recoat monthly; full strip &amp; wax every 3–6 months</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Stripping solution left on VCT longer than 20 minutes begins to soften and warp the tile edges. Always work in sections on large floors.</li><li>Applying finish over incompletely stripped or poorly rinsed floor traps stripper residue, causing finish adhesion failure, bubbling, and yellowing within days.</li><li>Using a high-speed burnisher on a dirty floor without a prior damp mop will grind soil into the finish, causing deep scratching visible from any angle.</li></ul></div>
+        </div>
+      </div>
+
+      <!-- LVT -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>LVT / LVP — Luxury Vinyl Tile / Plank</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Synthetic Resilient Floor — Modern vinyl with wear layer. NO wax or finish required. Increasingly common in commercial and healthcare settings.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>pH-neutral cleaner (7.0–9.0), 1:64</li><li>LVT-specific cleaner (manufacturer recommended)</li></ul></div>
+            <div class="spec-block"><h5>Prohibited Chemicals</h5><ul><li>Wax or floor finish — NOT compatible. Buildup creates yellowing film that cannot be stripped without damaging the wear layer</li><li>Steam mops — heat softens adhesive layers and causes delamination</li><li>Bleach at high concentration (&gt;5%)</li><li>Abrasive scrubbing pads</li><li>Solvent-based cleaners</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Sweep or microfiber dust mop</li><li>Damp mop with neutral solution — minimal water, especially on click-lock LVP (water seeps into seams)</li><li>No-rinse formula preferred</li><li>Air dry or dry mop</li></ol></div>
+            <div class="spec-block"><h5>Equipment</h5><ul><li>Microfiber flat mop only</li><li>Auto-scrubber with soft pad (white/red) for large areas — low pressure setting</li><li>Never: rotary buffer, steam mop, wet mop (excess water)</li></ul></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily damp mop; no stripping cycle needed; manufacturer recommends no machine scrubbing without approval</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Using a rotary buffer with a black stripping pad on LVT will delaminate the wear layer on contact. The damage is irreversible — a $15–$25/sq ft replacement cost for what was a routine cleaning task.</li><li>Applying any wax or acrylic floor finish to LVT creates a buildup film that looks like haze and yellows within months. The only removal method is aggressive chemical stripping which itself risks damaging the wear layer — a no-win situation.</li><li>Steam mops in break rooms or offices often get used on LVT. Heat above 140°F causes the adhesive to release, creating lifted edges and bubbling. Any crew-owned steam mops must not be used on LVT surfaces.</li></ul></div>
+        </div>
+      </div>
+
+      <!-- Hardwood -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Hardwood (Sealed vs Unsealed)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Natural Wood Floor. <strong>Sealed:</strong> polyurethane or similar topcoat — more cleaning-tolerant. <strong>Unsealed/oiled:</strong> bare or penetrating oil finish — much more vulnerable.</p></div>
+            <div class="spec-block"><h5>Approved — Sealed Hardwood</h5><ul><li>pH-neutral hardwood floor cleaner (7.0–8.5)</li><li>Hardwood-specific spray and flat mop system</li><li>Minimal moisture always</li></ul></div>
+            <div class="spec-block"><h5>Approved — Unsealed/Oiled</h5><ul><li>Wood oil soap (Murphy Oil Soap or equivalent), diluted</li><li>Very lightly dampened cloth only</li><li>Annual re-oiling treatment</li></ul></div>
+            <div class="spec-block"><h5>Prohibited — Both Types</h5><ul><li>Steam mops — moisture penetrates wood fibers, causes cupping and warping</li><li>Wet mopping — same result, slower but equally damaging</li><li>Vinegar/acid cleaners — degrades polyurethane finish</li><li>Ammonia cleaners — same</li><li>Alkaline floor cleaners (pH &gt;10)</li></ul></div>
+            <div class="spec-block"><h5>Process — Sealed</h5><ol><li>Microfiber dust mop daily to remove grit</li><li>Spray hardwood cleaner directly onto pad (not floor)</li><li>Flat mop — barely damp, dry within 30 seconds of application</li></ol></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily dust mop; damp clean weekly; professional refinish every 3–5 years (sealed)</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Wet mopping hardwood — even "just damp" — causes wood fibers to swell, then contract. Repeated over months this creates permanent cupping (edges rise, center dips). A full floor refinish costs $3–$8/sq ft. A replacement costs $10–$20/sq ft.</li><li>Using a steam mop on hardwood damages the finish in minutes and can warp planks permanently within a single session.</li><li>Oiled/unsealed hardwood is particularly common in higher-end office environments. Verify finish type before proceeding — when uncertain, use the most minimal method (dry dust mop only) and confirm with client.</li></ul></div>
+        </div>
+      </div>
+
+      <!-- Epoxy Concrete -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Epoxy-Coated Concrete</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Industrial Floor — Concrete with applied epoxy coating. Common in warehouses, garages, commercial kitchens. Very durable but coating can be chemically degraded.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>Neutral to mildly alkaline cleaner (7.0–10.0)</li><li>Degreaser pH 9.0–10.5 for oil/grease (kitchen areas)</li><li>Dilute bleach for sanitizing (0.5–1%) if required</li></ul></div>
+            <div class="spec-block"><h5>Prohibited Chemicals</h5><ul><li>Strong solvents (acetone, MEK) — dissolve epoxy coating</li><li>Concentrated acid — etches underlying concrete if coating fails</li><li>Citrus-based degreasers (d-limonene) — degrades epoxy binder</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Sweep or blow debris</li><li>Apply degreaser to grease spots, agitate with stiff brush</li><li>Wet mop with neutral solution (can be wetter than stone floors)</li><li>Scrub machine for large areas</li><li>Rinse and allow to dry</li></ol></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily sweep; damp mop as needed; inspect coating annually for chips/cracks and repair promptly</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Chips or cracks in the epoxy coating allow water and cleaning chemicals to penetrate to the concrete substrate, causing epoxy delamination. Any damage should be reported immediately — a small chip repaired promptly costs $50; a full recoat costs $3–$7/sq ft.</li><li>D-limonene degreasers (often marketed as "natural" or "citrus") are highly popular but are chemically incompatible with epoxy. They cause progressive softening and eventual peeling of the coating — typically noticed 2–3 months after regular use begins.</li></ul></div>
+        </div>
+      </div>
+
+      <!-- Polished Concrete -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Polished Concrete</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Industrial/Commercial Floor — Mechanically ground and polished concrete, usually with densifier and/or guard applied. No topcoat. Increasingly common in retail, office, and hospitality.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>pH-neutral to mildly alkaline (7.0–10.0)</li><li>Concrete-specific neutral cleaner</li><li>Auto-scrubber with appropriate pad</li></ul></div>
+            <div class="spec-block"><h5>Prohibited Chemicals</h5><ul><li>Acidic cleaners — etch polished surface</li><li>Wax or floor finish — incompatible with polished concrete</li><li>Bleach over 1% long-term — affects surface densifier</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Dust mop — grit is the primary enemy</li><li>Auto-scrubber or damp mop with neutral solution</li><li>Dry buff with high-speed burnisher to maintain gloss</li></ol></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily dust mop; weekly auto-scrub; monthly burnish; annual re-application of guard/densifier in high-traffic areas</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Grit and sand particles tracked onto polished concrete are abrasive against the polished surface. Not dust-mopping before wet cleaning embeds grit under the mop and creates scratch patterns visible under overhead lighting. Prevention is the only remedy — scratched polished concrete requires professional re-grinding.</li></ul></div>
+        </div>
+      </div>
+
+      <!-- Ceramic Tile -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Ceramic Tile (Glazed vs Unglazed)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Fired Clay Tile. <strong>Glazed:</strong> glass surface layer — non-porous, easy clean. <strong>Unglazed:</strong> porous, matte, requires sealing.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>Glazed: pH 4–10 (flexible), neutral preferred daily</li><li>Unglazed: pH 7–9.5 only (porous, absorbs alkaline)</li><li>Tile-specific degreaser for kitchen/commercial kitchen tile</li></ul></div>
+            <div class="spec-block"><h5>Prohibited — Unglazed</h5><ul><li>Wax — traps in pores, causes discoloration</li><li>Strong alkali on unsealed — penetrates and stains</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Sweep/vacuum</li><li>Damp mop with appropriate solution</li><li>For grout: scrub with brush and neutral/mild alkaline cleaner</li><li>Rinse thoroughly — residue in grout causes buildup</li></ol></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily mop; grout scrub monthly; seal unglazed annually</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Applying wax to unglazed ceramic traps in the porous surface and discolors — yellowing appears within weeks. Professional stripping requires aggressive methods that risk tile damage.</li><li>Grout lines trap cleaning product residue easily — always rinse thoroughly after grout cleaning to prevent chemical buildup that attracts soil and discolors over time.</li></ul></div>
+        </div>
+      </div>
+
+      <!-- Porcelain -->
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Porcelain Tile</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Dense Fired Tile — Lower porosity than ceramic, harder. Polished porcelain can mimic stone. Very common in commercial settings.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>pH 5–10 (robust surface tolerates wider range)</li><li>Neutral to mildly alkaline daily cleaner</li><li>Mild acid for mineral/hard water removal (periodic)</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Wax on polished porcelain — creates hazy film</li><li>Abrasive scrubbers on polished finish — fine scratching</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Sweep/vacuum</li><li>Damp mop with neutral solution</li><li>For mineral buildup: dilute acid cleaner (1:20), 5 min dwell, scrub, rinse thoroughly</li><li>Buff polished porcelain dry for shine</li></ol></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily mop; periodic descale in hard-water areas; no sealing required (sealed porcelain only for grout protection)</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Polished porcelain shows water spots and streaks readily — always buff dry after mopping in customer-facing areas or results look worse than before cleaning.</li></ul></div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /hard floors -->
+
+  <!-- ── SOFT SURFACES ── -->
+  <div class="surface-category">
+    <div class="category-header" onclick="toggleCategory(this)">
+      <span class="ch-left"><span class="ch-icon">🛋</span> Soft Surfaces</span>
+      <span class="ch-arrow">▼</span>
+    </div>
+    <div class="category-body" style="display:none;">
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Commercial Carpet (Loop vs Cut Pile)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Surface Category</h5><p>Textile Floor — <strong>Loop pile:</strong> dense, harder surface, common in offices, hides soil. <strong>Cut pile:</strong> softer, more luxurious feel, shows footprints and soil faster. Nylon, olefin, or wool fiber types vary chemical tolerance.</p></div>
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>Neutral carpet extraction cleaner pH 7.0–9.5</li><li>Pre-spray spotter: pH 7–10 (test inconspicuous area)</li><li>Encapsulation cleaner for low-moisture cleaning</li><li>Enzyme-based spotters for organic soils (urine, food, blood)</li></ul></div>
+            <div class="spec-block"><h5>Prohibited Chemicals</h5><ul><li>High-alkali spotters on wool carpet — wool is protein fiber, alkali causes irreversible damage</li><li>Bleach on colored carpet — removes dye permanently</li><li>Solvent spotters without ventilation — fumes and residue attract soil</li><li>Over-wetting — causes mold, backing delamination, odor</li></ul></div>
+            <div class="spec-block"><h5>Process — Routine</h5><ol><li>Vacuum thoroughly (HEPA filtration preferred)</li><li>Pre-treat visible spots with appropriate spotter</li><li>Agitate spots gently — blot, don't scrub (scrubbing spreads and deepens)</li><li>Extraction cleaning or encapsulation clean</li><li>Allow 2–4 hours dry time before heavy traffic</li></ol></div>
+            <div class="spec-block"><h5>Loop vs Cut Pile Differences</h5><ul><li><strong>Loop:</strong> More durable, resists crushing — standard equipment settings</li><li><strong>Cut pile:</strong> Vacuum with beater bar set high to avoid fiber damage; pile direction matters for appearance</li></ul></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily vacuum (high-traffic); deep extraction monthly (office); spot treat immediately; professional deep clean annually</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Over-wetting carpet during extraction leaves moisture trapped in the backing and subfloor. Visible mold growth occurs within 24–48 hours in humid climates. Backing delamination occurs over weeks. Use extraction machines set to maximum vacuum power and never leave carpet visibly wet.</li><li>Scrubbing a spot (rather than blotting) physically spreads the stain and drives it deeper into fibers. A 2-inch spill becomes a 6-inch stain with poor technique. Always blot from outside in.</li><li>Wool carpet with high-alkaline products: irreversible fiber degradation occurs with products above pH 10. Wool must always be identified before any chemical application.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Fabric Upholstery</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved</h5><ul><li>Water-based upholstery cleaner pH 7–9.5 (W or WS codes)</li><li>Dry cleaning solvent for S-coded fabrics</li><li>Enzyme spotter for organic stains</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Water on S-coded fabric (solvent-only) — permanent water rings</li><li>Bleach</li><li>Alkaline degreaser — fiber damage</li><li>Rubbing — brush or blot only</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Check fabric cleaning code (W, S, WS, or X)</li><li>Vacuum with brush attachment</li><li>Apply appropriate cleaner sparingly to cloth, not fabric</li><li>Blot — never rub</li><li>Allow to dry with airflow</li></ol></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Applying water-based cleaner to an S-coded (solvent only) fabric will cause permanent water spotting or ring marks. Always check the cleaning code label under the cushion before proceeding.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Vinyl Upholstery</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved</h5><ul><li>Neutral all-purpose cleaner pH 7–9</li><li>Dilute bleach (0.5%) for sanitizing healthcare settings</li><li>Medical-grade disinfectant wipes where required</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Solvent-based cleaners — soften and crack vinyl</li><li>Bleach concentration above 1% — discolors and dries vinyl</li><li>Abrasive scrubbers — scratch surface coating</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Wipe with damp cloth and neutral cleaner</li><li>For sanitizing: apply approved disinfectant, allow dwell time, wipe dry</li><li>Apply vinyl conditioner monthly to prevent cracking</li></ol></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Wipe daily in healthcare; weekly in office; condition monthly</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Vinyl upholstery in medical settings often gets cleaned with concentrated bleach wipes. Above 1% concentration, bleach dries and cracks the vinyl within months, requiring full replacement. Use approved healthcare-grade neutral disinfectants instead.</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /soft surfaces -->
+
+  <!-- ── GLASS & MIRRORS ── -->
+  <div class="surface-category">
+    <div class="category-header" onclick="toggleCategory(this)">
+      <span class="ch-left"><span class="ch-icon">🪟</span> Glass &amp; Mirrors</span>
+      <span class="ch-arrow">▼</span>
+    </div>
+    <div class="category-body" style="display:none;">
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Interior Glass / Windows &amp; Mirrors</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>Ammonia-based glass cleaner (standard windows)</li><li>Alcohol-based cleaner for mirrors (streak-free)</li><li>Distilled water + white vinegar (1:1) for light maintenance</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Ammonia-based cleaner on mirror backing edges — bleaches silver backing causing black edge spots</li><li>Abrasive pads — permanent scratches</li><li>Squeegee on tinted glass without technique training — streaking</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Remove dust with dry microfiber first</li><li>Apply cleaner to cloth/applicator — not directly to glass</li><li>Wipe in overlapping passes (Z or S pattern)</li><li>Follow with dry lint-free microfiber or squeegee (trained use)</li></ol></div>
+            <div class="spec-block"><h5>Mirrors Specifically</h5><ul><li>Spray at center of mirror only</li><li>Do not spray edges — solution runs behind mirror, attacks silver backing</li><li>Wipe outward from center</li></ul></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Ammonia or moisture reaching the edge of a mirror attacks the silver backing, creating black spots (foxing) that spread over time. These are permanent — the mirror must be replaced. Never spray directly onto a mirror.</li><li>Using glass cleaner near adjacent marble surfaces: if overspray lands on marble, the acidic or ammonia-containing mist can etch the surface. Protect marble surrounds before cleaning glass.</li></ul></div>
+        </div>
+      </div>
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Tempered Glass</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Notes</h5><p>Tempered glass cleans the same as standard glass, but requires extra care around edges and corners — tempered glass is strong in the center but shatters catastrophically if impacted at the edges. No scraping, no metal tools, no impact near edges.</p></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Razor blades or metal scrapers (paint removal, etc.) — edge impact shatters panel</li><li>Metal cleaning tools</li></ul></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Tempered glass panels in partition walls shatter entirely from a single edge impact. A razor blade slipping while removing a sticker can cause the entire panel to disintegrate — a $500–$2,000 replacement and potential injury. Use plastic scrapers only and avoid edge proximity.</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RESTROOM SURFACES ── -->
+  <div class="surface-category">
+    <div class="category-header" onclick="toggleCategory(this)">
+      <span class="ch-left"><span class="ch-icon">🚽</span> Restroom Surfaces</span>
+      <span class="ch-arrow">▼</span>
+    </div>
+    <div class="category-body" style="display:none;">
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Porcelain Fixtures (Toilets, Urinals, Sinks)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>Acid-based bowl cleaner (pH 1–3) for bowl interior — limescale/mineral removal</li><li>Neutral disinfectant (pH 7–9) for exterior surfaces</li><li>Quaternary ammonium or hydrogen peroxide disinfectant for high-touch areas</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Bleach + acid bowl cleaner together — produces toxic chlorine gas. NEVER MIX.</li><li>Abrasive scouring powder on porcelain glaze — scratches provide harbor for bacteria</li><li>Strong alkali on chrome fittings (faucets, handles) — pits chrome</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Apply bowl cleaner inside bowl first (allow to dwell while cleaning exterior)</li><li>Clean exterior surfaces with disinfectant: tank, lid, seat, base, floor immediately around</li><li>Scrub bowl with toilet brush, flush</li><li>Wipe all exterior chrome and porcelain dry</li><li>Log in compliance record (time, product, operator)</li></ol></div>
+            <div class="spec-block"><h5>Dwell Time</h5><p>Bowl cleaner: 5–10 min for heavy scale; disinfectant: per label (typically 60 sec contact)</p></div>
+            <div class="spec-block"><h5>Frequency</h5><p>Daily in commercial settings; twice daily in high-use restrooms; document each clean</p></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>NEVER mix acid bowl cleaners with bleach-based disinfectants. The reaction produces chlorine gas — a toxic inhalation hazard. This is the most common dangerous chemical accident in commercial cleaning. Establish a one-product-at-a-time protocol and train every crew member without exception.</li><li>Abrasive scouring pads on porcelain glaze create micro-scratches that harbor bacteria permanently, defeating the sanitation purpose. Use non-abrasive bowl brushes and soft pads only.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Stainless Steel Restroom Fixtures</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>Neutral cleaner or stainless-specific cleaner pH 7–9</li><li>Stainless steel polish for finish maintenance</li><li>Isopropyl alcohol for fingerprint removal</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Bleach/chlorine products — causes pitting corrosion on stainless over time</li><li>Steel wool or abrasive pads — scratch surface, create corrosion sites</li><li>Acid cleaners (bowl cleaner, descalers) on stainless hardware</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Wipe with damp microfiber with neutral cleaner</li><li>Always wipe in direction of grain (visible brush lines)</li><li>Dry immediately</li><li>Apply stainless polish in direction of grain</li></ol></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Wiping stainless steel against the grain creates visible scratch marks in the direction of cleaning — immediately obvious and unprofessional. Always identify the grain direction before cleaning and train crew to follow it consistently.</li><li>Bleach splashing onto stainless steel fixtures from bowl cleaning will cause pitting corrosion over months — gradual but irreversible.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Grout (Standard Cement vs Epoxy)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Notes</h5><p><strong>Cement grout:</strong> porous, stains easily, requires sealing. <strong>Epoxy grout:</strong> non-porous, stain-resistant, nearly maintenance-free but scratches if abraded.</p></div>
+            <div class="spec-block"><h5>Cement Grout</h5><ul><li>Neutral to mildly alkaline cleaner (pH 7–10)</li><li>Grout brush required for deep cleaning</li><li>Apply penetrating grout sealer annually</li><li>Avoid acid — reacts with Portland cement, erodes grout</li></ul></div>
+            <div class="spec-block"><h5>Epoxy Grout</h5><ul><li>Standard neutral cleaner</li><li>No acid needed (stain resistant)</li><li>No sealing required</li><li>Avoid abrasive pads — scratches surface</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Pre-wet grout lines</li><li>Apply cleaner, allow 3–5 min dwell</li><li>Scrub with grout brush</li><li>Rinse thoroughly</li><li>For cement grout: seal after cleaning when dry</li></ol></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Acid on cement grout erodes the binder progressively — over months of routine acid cleaning, grout lines visibly widen and crumble. The fix is full re-grouting.</li><li>Unsealed cement grout in restrooms absorbs cleaning chemical residue and body waste permanently, creating permanent discoloration and bacteria harboring that no amount of cleaning will resolve. Seal every 12 months minimum.</li></ul></div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /restroom -->
+
+  <!-- ── MEDICAL/HIGH-TOUCH ── -->
+  <div class="surface-category">
+    <div class="category-header" onclick="toggleCategory(this)">
+      <span class="ch-left"><span class="ch-icon">🏥</span> Medical / High-Touch Surfaces</span>
+      <span class="ch-arrow">▼</span>
+    </div>
+    <div class="category-body" style="display:none;">
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Medical-Grade Plastic (IV Poles, Bed Rails, Equipment Housings)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved Chemicals</h5><ul><li>Quaternary ammonium disinfectant (hospital-grade, EPA registered)</li><li>Accelerated hydrogen peroxide products</li><li>Isopropyl alcohol 70% for spot sanitizing</li><li>Products with documented efficacy against target organisms (MRSA, C. diff, etc.)</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Bleach at concentrations above 1,000 ppm (0.1%) on plastic — degrades material over time</li><li>Phenolic disinfectants near neonatal areas</li><li>Abrasive pads — create harboring scratches in plastic</li><li>Non-EPA-registered products — compliance failure risk</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Clean visible soil first with neutral cleaner (clean before you disinfect)</li><li>Apply disinfectant ensuring full surface coverage</li><li>Allow full contact dwell time per label (typically 1–10 min)</li><li>Wipe dry or allow to air dry per protocol</li><li>Document product, lot number, time, operator</li></ol></div>
+            <div class="spec-block"><h5>Compliance</h5><ul><li>Joint Commission (JC) requires documented cleaning protocol per surface type</li><li>EPA registration number must be recorded in SDS log</li><li>Crew must be trained and credentialed per facility policy</li></ul></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Using non-EPA-registered disinfectants in healthcare settings is a Joint Commission compliance failure — facilities can lose accreditation. Every product used in a medical environment must have its EPA Reg. No. recorded. This is non-negotiable.</li><li>"Clean before disinfect" is not optional. Disinfectants cannot penetrate organic soil (blood, body fluid). Disinfecting without cleaning first provides false compliance and no actual microbial reduction.</li><li>Phenolic disinfectants near neonatal or NICU areas are contraindicated by most hospital protocols — always confirm facility-specific approved product list before cleaning any medical space.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Electronic Equipment Housings</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved</h5><ul><li>Pre-moistened electronics-safe wipes (isopropyl alcohol 70%, no bleach)</li><li>Slightly damp microfiber cloth with minimal moisture</li><li>Electronics-approved quaternary disinfectant wipes (for keyboards, touchscreens)</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Spray liquids near electronics — fluid ingress causes irreversible damage</li><li>Bleach wipes on screens — strip anti-reflective coating</li><li>Ammonia-based products on touchscreens</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Power down or sleep device where possible</li><li>Apply product to cloth/wipe — never directly to device</li><li>Wipe surfaces, avoid ports and gaps</li><li>Allow to dry completely before powering on</li></ol></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Spraying any liquid directly onto electronic equipment — even a single spray of glass cleaner — can cause permanent liquid damage to internal components. The damage may not be immediately visible but manifests hours later. Always apply to cloth, never to device.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Rubber &amp; Silicone Surfaces</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved</h5><ul><li>Neutral cleaner pH 7–9</li><li>Isopropyl alcohol 70% for disinfecting</li><li>Mild soap solution</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Petroleum-based solvents — swell and degrade rubber</li><li>Bleach at high concentration — degrades silicone over time</li><li>Abrasive pads — surface damage</li><li>Oil-based products on silicone</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Wipe with neutral solution</li><li>Disinfect with IPA wipe</li><li>Air dry</li></ol></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /medical -->
+
+  <!-- ── METALS ── -->
+  <div class="surface-category">
+    <div class="category-header" onclick="toggleCategory(this)">
+      <span class="ch-left"><span class="ch-icon">✨</span> Metals</span>
+      <span class="ch-arrow">▼</span>
+    </div>
+    <div class="category-body" style="display:none;">
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Brushed Stainless Steel</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved</h5><ul><li>Stainless-specific cleaner with passivating agent</li><li>Neutral all-purpose cleaner pH 7–9</li><li>Microfiber cloth</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Steel wool or iron-containing abrasives — embeds iron particles causing rust spots</li><li>Bleach — pitting corrosion</li><li>Acids — attacks passive layer</li><li>Cross-grain wiping — visible scratch marks</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Identify grain direction</li><li>Wipe with damp microfiber in grain direction</li><li>Apply stainless cleaner/polish in grain direction</li><li>Buff dry with clean microfiber</li></ol></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Using steel wool on stainless steel embeds microscopic iron particles that cause orange rust spots within days — even on premium 316-grade stainless. Use only dedicated stainless pads or microfiber.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Brass (Lacquered vs Unlacquered)</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Lacquered Brass</h5><ul><li>Damp cloth with mild neutral cleaner only</li><li>Do not polish — polishing removes lacquer</li><li>Do not use brass polish on lacquered surfaces</li></ul></div>
+            <div class="spec-block"><h5>Unlacquered Brass</h5><ul><li>Brass-specific cleaner or mild acid (lemon juice + salt for tarnish)</li><li>Brass polish applied with soft cloth</li><li>Rinse thoroughly after acid treatment</li></ul></div>
+            <div class="spec-block"><h5>Both Types — Prohibited</h5><ul><li>Abrasive compounds — scratches</li><li>Bleach — green corrosion (verdigris)</li><li>Ammonia — tarnishes and corrodes</li></ul></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Applying brass polish to lacquered brass removes the lacquer, exposing raw brass that then tarnishes rapidly. The only fix is professional re-lacquering. Always confirm with client whether brass is lacquered before any polish application.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Chrome &amp; Aluminum</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Chrome</h5><ul><li>Neutral cleaner, soft cloth</li><li>Chrome-specific polish for shine</li><li>Prohibited: bleach (pitting), abrasive (scratching), strong acids</li></ul></div>
+            <div class="spec-block"><h5>Aluminum</h5><ul><li>pH-neutral cleaner only</li><li>Prohibited: strong alkali (pH &gt;10) — etches aluminum permanently, causes white oxide staining</li><li>Prohibited: strong acid — same result</li></ul></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Alkaline degreasers (commonly used on floors) contact aluminum door frames and window tracks causing white etching stains within minutes. Protect aluminum surfaces from floor cleaning runoff.</li></ul></div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /metals -->
+
+  <!-- ── SPECIALTY ── -->
+  <div class="surface-category">
+    <div class="category-header" onclick="toggleCategory(this)">
+      <span class="ch-left"><span class="ch-icon">🎯</span> Specialty Surfaces</span>
+      <span class="ch-arrow">▼</span>
+    </div>
+    <div class="category-body" style="display:none;">
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Whiteboards &amp; Chalkboards</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Whiteboard</h5><ul><li>Use dry erase cleaner or isopropyl alcohol 70%</li><li>Microfiber cloth</li><li>For ghost marks: whiteboard conditioner or dry erase marker over ghost marks then wipe</li><li>Prohibited: abrasive pads, bleach, nail polish remover (acetone)</li></ul></div>
+            <div class="spec-block"><h5>Chalkboard</h5><ul><li>Dry erase with felt eraser first</li><li>Damp sponge with water for deep clean</li><li>Allow to dry fully — chalk writes poorly on damp surfaces</li><li>Condition with chalk (prime board) after wet cleaning</li></ul></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Using abrasive pads on whiteboards permanently scratches the coating, creating grooves that hold dry erase ink permanently — no amount of cleaning restores a scratched whiteboard surface.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Acoustic Ceiling Tiles</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved</h5><ul><li>Vacuum with soft brush attachment</li><li>Light damp sponge with neutral cleaner for spot cleaning only</li><li>Ceiling tile paint/coating spray for cosmetic restoration</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Wet mopping or soaking — tiles warp, sag, and fall from grid</li><li>Pressure washing</li><li>Heavy scrubbing — destroys acoustic perforation pattern</li></ul></div>
+          </div>
+          <div class="warning-block"><h5>⚠ Warning Flags</h5><ul><li>Acoustic ceiling tiles saturated with water sag and break under their own weight, falling from the grid. They are not recoverable — must be replaced. Never use anything wetter than a barely damp sponge, and even then only for spot treatment.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="surface-item">
+        <div class="surface-title" onclick="toggleSurface(this)"><h4>Fabric Wall Panels</h4><span class="st-arrow">▼</span></div>
+        <div class="surface-detail">
+          <div class="spec-grid">
+            <div class="spec-block"><h5>Approved</h5><ul><li>Vacuum with brush attachment (low suction)</li><li>Dry cleaning powder for spot treatment</li><li>Foam-based upholstery cleaner (W or WS coded panels)</li></ul></div>
+            <div class="spec-block"><h5>Prohibited</h5><ul><li>Water-based cleaning on S-coded fabric</li><li>Rubbing — snags and pills fabric</li><li>Bleach — permanent color removal</li></ul></div>
+            <div class="spec-block"><h5>Process</h5><ol><li>Check fabric cleaning code</li><li>Vacuum entire panel surface</li><li>Spot treat with appropriate product</li><li>Blot — never rub</li><li>Air dry with good ventilation</li></ol></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /specialty -->
+
+</div>
+</div><!-- /surface section -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 5 — GO-TO-MARKET
+═══════════════════════════════════════════════════════════════ -->
+<div id="gtm" class="page-section">
+  <div class="section-header">
+    <div class="section-number">5</div>
+    <div>
+      <h2>Go-to-Market Strategy</h2>
+      <p>Pilot-first, badge-driven, word of mouth flywheel</p>
+    </div>
+  </div>
+
+  <div class="funnel-row">
+    <div class="funnel-step">
+      <div class="fs-num">Step 1</div>
+      <div class="fs-name">Clean happens</div>
+      <div class="fs-desc">Crew delivers job</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fs-num">Step 2</div>
+      <div class="fs-name">Report sent</div>
+      <div class="fs-desc">FM receives PDF</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fs-num">Step 3</div>
+      <div class="fs-name">Badge seen</div>
+      <div class="fs-desc">"Powered by [Product]"</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fs-num">Step 4</div>
+      <div class="fs-name">Curiosity</div>
+      <div class="fs-desc">FM clicks / searches</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fs-num">Step 5</div>
+      <div class="fs-name">Product page</div>
+      <div class="fs-desc">Demo request</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fs-num">Step 6</div>
+      <div class="fs-name">New client</div>
+      <div class="fs-desc">Onboard + repeat</div>
+    </div>
+  </div>
+
+  <div class="gtm-grid">
+    <div class="gtm-card">
+      <h3>🧪 Pilot — Craddock's Cleaning Services</h3>
+      <ul>
+        <li>Jeremy Craddock — Lancaster TX + Arlington TX</li>
+        <li>60+ recurring commercial clients</li>
+        <li>Every client receives a post-clean report</li>
+        <li>Every report carries the product badge</li>
+        <li>60+ FM inboxes per cleaning cycle = organic impressions</li>
+        <li>Pilot goal: validate report quality + FM reception</li>
+        <li>Success metric: inbound inquiries from FMs within 90 days</li>
+      </ul>
+    </div>
+    <div class="gtm-card">
+      <h3>🎯 Primary Target Market</h3>
+      <ul>
+        <li>Independent commercial cleaning companies</li>
+        <li>1–10 crews</li>
+        <li>$500k–$5M annual revenue</li>
+        <li>US-based (initially TX, FL, CA, NY markets)</li>
+        <li>Serve offices, medical, retail, education</li>
+        <li>Currently using paper or group-chat documentation</li>
+        <li>Pain: no proof of service, no compliance trail</li>
+      </ul>
+    </div>
+    <div class="gtm-card">
+      <h3>🏢 Secondary Target — Enterprise</h3>
+      <ul>
+        <li>Franchise cleaning networks (master franchisors)</li>
+        <li>Regional chains with 5+ locations</li>
+        <li>White-label resellers (Tier 4)</li>
+        <li>Hospital system service providers</li>
+        <li>BSM/facility management companies</li>
+        <li>Deal size: $2,000–$10,000/month</li>
+      </ul>
+    </div>
+    <div class="gtm-card">
+      <h3>📈 Distribution Channels</h3>
+      <ul>
+        <li><strong>Badge flywheel</strong> — primary, zero cost</li>
+        <li>ISSA (cleaning industry association) presence</li>
+        <li>LinkedIn outreach to cleaning company owners</li>
+        <li>Cleaning franchise networks (affiliate deals)</li>
+        <li>Janitorial supply company partnerships (reseller)</li>
+        <li>Cold outbound to TX commercial cleaning companies</li>
+        <li>Demo video → paid social (Facebook/Instagram for small biz)</li>
+      </ul>
+    </div>
+    <div class="gtm-card">
+      <h3>💬 Key Messaging</h3>
+      <ul>
+        <li>"Your crew already takes photos. Now those photos become proof."</li>
+        <li>"Every client gets a report. Every report wins the next contract."</li>
+        <li>"Five minutes after the job is done, your client has the documentation."</li>
+        <li>"Built for cleaning companies. Works with Telegram. No app downloads."</li>
+        <li>"The badge on every report turns your clients into your sales team."</li>
+      </ul>
+    </div>
+    <div class="gtm-card">
+      <h3>🏆 Competitive Position</h3>
+      <ul>
+        <li>Vs. BSM platforms (ServiceChannel, Corrigo): too expensive, too complex</li>
+        <li>Vs. paper/WhatsApp: no documentation, no proof</li>
+        <li>Vs. generic CRM: not cleaning-specific, no report output</li>
+        <li>Our wedge: Telegram-native (zero friction), AI-structured reports, built-in K-factor</li>
+        <li>Moat: surface specs library, compliance templates, K-factor network effects</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="not-target">
+    <h4>🚫 NOT Our Target (Do Not Chase These)</h4>
+    <ul>
+      <li>Residential cleaning companies</li>
+      <li>Janitorial supply companies (they're distribution, not buyers)</li>
+      <li>Facility managers (they're report recipients, not product buyers)</li>
+      <li>Single-person owner-operators (unit economics don't work at Tier 0)</li>
+      <li>International markets (initial US-only focus)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <span>LeadPillar</span> — Confidential — April 2026 &nbsp;|&nbsp; Product Map v1.0 &nbsp;|&nbsp; Builder: Volodymyr (barna@zappr.ai) &nbsp;|&nbsp; Pilot: Craddock's Cleaning Services
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════════
+     JAVASCRIPT — filter table + collapse toggles
+═══════════════════════════════════════════════════════════════ -->
+<script>
+  // Block filter
+  document.querySelectorAll('.block-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.block-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const block = this.dataset.block;
+      document.querySelectorAll('#featureTable tbody tr').forEach(row => {
+        if (block === 'ALL' || row.dataset.block === block) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  // Category toggle
+  function toggleCategory(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : 'block';
+    header.classList.toggle('open', !isOpen);
+  }
+
+  // Surface item toggle
+  function toggleSurface(titleEl) {
+    const detail = titleEl.nextElementSibling;
+    const isOpen = detail.classList.contains('open');
+    detail.classList.toggle('open', !isOpen);
+    titleEl.classList.toggle('open', !isOpen);
+  }
+</script>
+
+</body>
+</html>
